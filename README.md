@@ -8,31 +8,28 @@ Game edukasi 2D berbasis cerita dengan sistem *crafting* (ala Minecraft) yang di
 res://
 ├── addons/                     # Plugin editor (Godot AI & MCP Toolkit)
 ├── assets/                     # Aset mentah non-kode
-│   ├── art/
-│   │   ├── characters/         # Sprite karakter & portrait dialog
-│   │   ├── items/              # Ikon item & material crafting
-│   │   ├── tiles/              # Tileset environment / workshop
-│   │   └── ui/                 # Panel, slot inventory, tombol
+│   ├── sprites/                # Sprite karakter, item, dan objek 2D
+│   ├── backgrounds/            # Latar belakang / environment
 │   ├── audio/
 │   │   ├── music/              # BGM (.ogg)
-│   │   └── sfx/                # Efek suara crafting, UI, langkah (.wav / .ogg)
-│   ├── fonts/                  # Font (.ttf / .otf)
-│   └── shaders/                # Shader 2D (.gdshader)
-├── autoload/                   # Singleton global (Project Settings > Autoload)
-├── resources/                  # Custom Resource (.gd & .tres) untuk data-driven design
-│   ├── items/                  # Definisi & data item
-│   ├── recipes/                # Definisi & data resep crafting
-│   └── dialogues/              # Data dialog cerita & materi edukasi
-├── scenes/                     # Scene (.tscn) & script (.gd) co-located per fitur
+│   │   └── sfx/                # Efek suara (.wav / .ogg)
+│   └── fonts/                  # Font (.ttf / .otf)
+├── scenes/                     # Semua scene Godot (.tscn)
 │   ├── main/                   # Root scene (main.tscn & main.gd) — entry point game
-│   ├── world/                  # Area 2D / workshop / level eksplorasi
-│   ├── entities/
-│   │   ├── player/             # Scene & script player
-│   │   └── npc/                # Scene & script NPC (pemberi cerita/quest)
-│   ├── crafting/               # Meja crafting, grid slot, preview hasil & info edukasi
-│   ├── inventory/              # UI inventory / hotbar & slot item
-│   ├── dialogue/               # Dialogue box cerita & pilihan jawaban
-│   └── ui/                     # Main menu, HUD, pause menu, buku resep
+│   ├── player/                 # Scene player
+│   ├── npc/                    # Scene NPC
+│   ├── gameplay/
+│   │   ├── card_puzzle/        # Scene gameplay card puzzle
+│   │   └── crafting/           # Scene gameplay crafting
+│   └── ui/                     # Main menu, HUD, pause menu, dialog UI
+├── scripts/                    # Script GDScript (.gd)
+│   ├── managers/               # Manager / autoload global
+│   ├── systems/                # Sistem gameplay (crafting, puzzle, cerita)
+│   └── components/             # Komponen reusable
+├── data/                       # Data game (.tres / .json / custom resource)
+│   ├── blueprints/             # Data blueprint
+│   ├── recipes/                # Data resep crafting
+│   └── quests/                 # Data quest & cerita
 ├── project.godot               # Konfigurasi proyek Godot
 └── icon.svg                    # Ikon proyek
 ```
@@ -41,7 +38,7 @@ res://
 
 - **Folder & file** (`.tscn`, `.gd`, `.tres`, aset): `snake_case` (contoh: `player_controller.gd`, `main_menu.tscn`).
 - **Nama Node di Scene Tree**: `PascalCase` (contoh: `Player`, `AnimationPlayer`, `CollisionShape2D`).
-- **Class name** (`class_name`): `PascalCase` (contoh: `class_name ItemData`).
+- **Class name** (`class_name`): `PascalCase` (contoh: `class_name RecipeData`).
 
 ## Catatan Kolaborasi
 
