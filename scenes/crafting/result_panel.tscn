@@ -1,0 +1,70 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/crafting/result_panel.gd" id="1_result"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_res_panel"]
+bg_color = Color(0.145, 0.173, 0.157, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.243, 0.29, 0.263, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="ResultPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(360, 0)
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_res_panel")
+script = ExtResource("1_result")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.933, 0.894, 1)
+theme_override_font_sizes/font_size = 18
+text = "Informasi Resep & Feedback"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.796, 0.769, 0.714, 1)
+theme_override_font_sizes/font_size = 14
+text = "Status: Siap Meracik"
+autowrap_mode = 3
+
+[node name="OutputLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.933, 0.894, 1)
+theme_override_font_sizes/font_size = 15
+text = "Output: -"
+autowrap_mode = 3
+
+[node name="InventoryStockLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.796, 0.769, 0.714, 1)
+theme_override_font_sizes/font_size = 13
+text = "Hasil di Inventory: Iron Ingot x0"
+autowrap_mode = 3
+
+[node name="FeedbackText" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.855, 0.831, 0.784, 1)
+theme_override_font_sizes/normal_font_size = 14
+text = "Pilih hingga 5 kartu dari hand di bawah (Material, Process, dan Tool), lalu tekan Craft / Process."

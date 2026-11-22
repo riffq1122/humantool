@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+
+[resource]
+script = ExtResource("1_card")
+card_id = &"pasir_silica"
+display_name = "Pasir Silica"
+category = 0
+description = "Pasir silika murni yang dapat dilebur menjadi lembaran kaca bening."
+consumable = true

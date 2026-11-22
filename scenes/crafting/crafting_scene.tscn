@@ -1,0 +1,944 @@
+[gd_scene load_steps=26 format=3]
+
+[ext_resource type="Script" path="res://scenes/crafting/crafting_scene.gd" id="1_crafting_scene"]
+[ext_resource type="Script" path="res://scripts/managers/inventory_manager.gd" id="2_inv_mgr"]
+[ext_resource type="PackedScene" path="res://scenes/crafting/card_hand.tscn" id="3_card_hand"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/card game background.png" id="4_wood_bg"]
+[ext_resource type="Script" path="res://scenes/crafting/gear_icon.gd" id="5_gear_icon"]
+[ext_resource type="FontFile" path="res://assets/fonts/Gochi_Hand/GochiHand-Regular.ttf" id="6_gochi"]
+[ext_resource type="FontFile" path="res://assets/fonts/Love_Ya_Like_A_Sister/LoveYaLikeASister-Regular.ttf" id="7_love"]
+[ext_resource type="Texture2D" path="res://assets/card/Group 36.png" id="8_tpl_action"]
+[ext_resource type="Texture2D" path="res://assets/card/Group 34.png" id="9_tpl_tool"]
+[ext_resource type="Texture2D" path="res://assets/card/Group 32.png" id="10_tpl_material"]
+[ext_resource type="PackedScene" path="res://scenes/crafting/card_ui.tscn" id="11_card_ui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gear_btn"]
+bg_color = Color(0.18, 0.09, 0.03, 0.45)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gear_btn_hover"]
+bg_color = Color(0.28, 0.14, 0.05, 0.72)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.894, 0.369, 0.85)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_feedback_pill"]
+bg_color = Color(0.169, 0.094, 0.039, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.451, 0.251, 0.098, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 14
+content_margin_top = 6
+content_margin_right = 14
+content_margin_bottom = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brown_btn"]
+bg_color = Color(0.541, 0.263, 0.035, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.102, 0.024, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 4
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brown_btn_hover"]
+bg_color = Color(0.62, 0.314, 0.055, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.894, 0.369, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 4
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview_card"]
+bg_color = Color(1, 0.8, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.118, 0.086, 0.063, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.38)
+shadow_size = 6
+shadow_offset = Vector2(-4, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_label_pill"]
+bg_color = Color(0.89, 0.882, 0.863, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 18
+content_margin_top = 3
+content_margin_right = 18
+content_margin_bottom = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_normal"]
+draw_center = false
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.42)
+shadow_size = 7
+shadow_offset = Vector2(-5, 7)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_hover"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.894, 0.369, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 7
+shadow_offset = Vector2(-5, 7)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_combine_pill"]
+bg_color = Color(0.769, 0.416, 0.082, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.102, 0.024, 0.8)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 5
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_combine_pill_hover"]
+bg_color = Color(0.847, 0.486, 0.133, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.894, 0.369, 1)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 6
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_combine_pill_disabled"]
+bg_color = Color(0.42, 0.29, 0.192, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.14, 0.08, 0.7)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sidebar_bg"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orange_box"]
+bg_color = Color(0.784, 0.427, 0.094, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.22, 0.102, 0.024, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_storage_tab"]
+bg_color = Color(0.784, 0.427, 0.094, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 0
+border_color = Color(0.22, 0.102, 0.024, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+content_margin_left = 24
+content_margin_top = 4
+content_margin_right = 24
+content_margin_bottom = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_frame"]
+bg_color = Color(0.29, 0.153, 0.063, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.784, 0.427, 0.094, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_book_page"]
+bg_color = Color(0.961, 0.922, 0.839, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.541, 0.369, 0.184, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="CraftingScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_crafting_scene")
+
+[node name="InventoryManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_inv_mgr")
+
+[node name="MainSplitHBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftTableContainer" type="Control" parent="MainSplitHBox"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WoodBackground" type="TextureRect" parent="MainSplitHBox/LeftTableContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_wood_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="RightEdgeShadow" type="ColorRect" parent="MainSplitHBox/LeftTableContainer"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.34)
+
+[node name="TableMargin" type="MarginContainer" parent="MainSplitHBox/LeftTableContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="TableVBox" type="VBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TopHeaderRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SettingsButton" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TopHeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "Pengaturan & Navigasi"
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_gear_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gear_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gear_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gear_btn_hover")
+
+[node name="GearIcon" type="Control" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TopHeaderRow/SettingsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_gear_icon")
+
+[node name="StageFeedbackPill" type="PanelContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TopHeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_feedback_pill")
+
+[node name="StageFeedbackLabel" type="Label" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TopHeaderRow/StageFeedbackPill"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.969, 0.949, 0.91, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 17
+text = "Pilih 3 kartu dari deck bawah, lalu tekan combine."
+autowrap_mode = 3
+
+[node name="BookButton" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TopHeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(126, 44)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Buka buku panduan resep"
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_brown_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/focus = SubResource("StyleBoxFlat_brown_btn_hover")
+text = "Panduan"
+
+[node name="CenterStageRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 34
+alignment = 1
+
+[node name="YouGetCenter" type="CenterContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow"]
+layout_mode = 2
+
+[node name="YouGetFrame" type="PanelContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(162, 224)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PreviewPillCenter" type="CenterContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PreviewPill" type="PanelContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer/PreviewPillCenter"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_label_pill")
+
+[node name="PreviewTitle" type="Label" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer/PreviewPillCenter/PreviewPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.102, 0.078, 0.063, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 19
+text = "preview"
+horizontal_alignment = 1
+
+[node name="PreviewContentCenter" type="CenterContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="YouGetItemTexture" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer/PreviewContentCenter"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="YouGetStarLabel" type="Label" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer/PreviewContentCenter"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.102, 0.078, 0.063, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 34
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="YouGetItemLabel" type="Label" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.102, 0.078, 0.063, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 17
+text = "Pilih Kartu"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CombineSlotsRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="CombineSlot0" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 202)
+layout_mode = 2
+size_flags_vertical = 4
+disabled = true
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_slot_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_slot_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_slot_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_slot_hover")
+
+[node name="EmptyTemplate" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot0"]
+modulate = Color(0.92, 0.92, 0.92, 0.9)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("8_tpl_action")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot0" instance=ExtResource("11_card_ui")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CombineSlot1" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 202)
+layout_mode = 2
+size_flags_vertical = 4
+disabled = true
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_slot_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_slot_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_slot_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_slot_hover")
+
+[node name="EmptyTemplate" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot1"]
+modulate = Color(0.92, 0.92, 0.92, 0.9)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_tpl_tool")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot1" instance=ExtResource("11_card_ui")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CombineSlot2" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 202)
+layout_mode = 2
+size_flags_vertical = 4
+disabled = true
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_slot_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_slot_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_slot_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_slot_hover")
+
+[node name="EmptyTemplate" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot2"]
+modulate = Color(0.92, 0.92, 0.92, 0.9)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_tpl_material")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot2" instance=ExtResource("11_card_ui")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CombineButtonRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="CombineButton" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CombineButtonRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(204, 48)
+layout_mode = 2
+disabled = true
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.91, 0.867, 0.816, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_combine_pill")
+theme_override_styles/hover = SubResource("StyleBoxFlat_combine_pill_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_combine_pill")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_combine_pill_disabled")
+theme_override_styles/focus = SubResource("StyleBoxFlat_combine_pill_hover")
+text = "combine"
+
+[node name="CardHand" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox" instance=ExtResource("3_card_hand")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="RightSidebarPanel" type="PanelContainer" parent="MainSplitHBox"]
+custom_minimum_size = Vector2(356, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sidebar_bg")
+
+[node name="SidebarMargin" type="MarginContainer" parent="MainSplitHBox/RightSidebarPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="RightColumn" type="VBoxContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ObjectivePanel" type="PanelContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn"]
+custom_minimum_size = Vector2(0, 254)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_orange_box")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="ObjVBox" type="VBoxContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ObjPillCenter" type="CenterContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel/MarginContainer/ObjVBox"]
+layout_mode = 2
+
+[node name="ObjPill" type="PanelContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel/MarginContainer/ObjVBox/ObjPillCenter"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_label_pill")
+
+[node name="ObjectiveLabel" type="Label" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel/MarginContainer/ObjVBox/ObjPillCenter/ObjPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.102, 0.078, 0.063, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 21
+text = "objektif"
+horizontal_alignment = 1
+
+[node name="ObjectiveItemCenter" type="CenterContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel/MarginContainer/ObjVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ObjectiveItemTexture" type="TextureRect" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel/MarginContainer/ObjVBox/ObjectiveItemCenter"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(180, 140)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ObjectiveTargetLabel" type="Label" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/ObjectivePanel/MarginContainer/ObjVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_colors/font_outline_color = Color(0.102, 0.071, 0.043, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 21
+text = "Alat Jahit"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StorageSection" type="VBoxContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="StorageTabCenter" type="CenterContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection"]
+layout_mode = 2
+
+[node name="StorageTab" type="PanelContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection/StorageTabCenter"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_storage_tab")
+
+[node name="InventoryTitleLabel" type="Label" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection/StorageTabCenter/StorageTab"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 22
+text = "penyimpanan"
+horizontal_alignment = 1
+
+[node name="InventoryPanel" type="PanelContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_orange_box")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection/InventoryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="InvVBox" type="VBoxContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection/InventoryPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InventoryHintLabel" type="Label" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection/InventoryPanel/MarginContainer/InvVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.102, 0.071, 0.043, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 16
+text = "Penyimpanan kosong. Hasil combine akan tersimpan di sini."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="InventoryScroll" type="ScrollContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection/InventoryPanel/MarginContainer/InvVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="InventoryItemsFlow" type="HFlowContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn/StorageSection/InventoryPanel/MarginContainer/InvVBox/InventoryScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+alignment = 1
+
+[node name="SettingsPopup" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Scrim" type="ColorRect" parent="SettingsPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="CenterContainer" type="CenterContainer" parent="SettingsPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModalPanel" type="PanelContainer" parent="SettingsPopup/CenterContainer"]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_frame")
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsPopup/CenterContainer/ModalPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 22
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SettingsTitle" type="Label" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 26
+text = "Pengaturan"
+horizontal_alignment = 1
+
+[node name="MuteCheckButton" type="CheckButton" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 19
+text = "Matikan Musik / Suara"
+
+[node name="VolumeRow" type="HBoxContainer" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="VolumeLabel" type="Label" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer/VolumeRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 19
+text = "Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer/VolumeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="VolumeValueLabel" type="Label" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer/VolumeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 18
+text = "100%"
+horizontal_alignment = 2
+
+[node name="SettingsBookButton" type="Button" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_brown_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/focus = SubResource("StyleBoxFlat_brown_btn_hover")
+text = "Buka Buku Panduan Resep"
+
+[node name="BackToDialogueButton" type="Button" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_brown_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/focus = SubResource("StyleBoxFlat_brown_btn_hover")
+text = "Kembali ke Percakapan"
+
+[node name="CloseSettingsButton" type="Button" parent="SettingsPopup/CenterContainer/ModalPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_combine_pill")
+theme_override_styles/hover = SubResource("StyleBoxFlat_combine_pill_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_combine_pill")
+theme_override_styles/focus = SubResource("StyleBoxFlat_combine_pill_hover")
+text = "Lanjutkan"
+
+[node name="BookPopup" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Scrim" type="ColorRect" parent="BookPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="CenterContainer" type="CenterContainer" parent="BookPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BookModalPanel" type="PanelContainer" parent="BookPopup/CenterContainer"]
+custom_minimum_size = Vector2(740, 450)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_frame")
+
+[node name="MarginContainer" type="MarginContainer" parent="BookPopup/CenterContainer/BookModalPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="BookVBox" type="VBoxContainer" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="BookTitle" type="Label" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 26
+text = "Buku Panduan Resep"
+horizontal_alignment = 1
+
+[node name="BookPagesHBox" type="HBoxContainer" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="LeftPagePanel" type="PanelContainer" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox/BookPagesHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_book_page")
+
+[node name="MarginContainer" type="MarginContainer" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox/BookPagesHBox/LeftPagePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="LeftPageText" type="RichTextLabel" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox/BookPagesHBox/LeftPagePanel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/default_color = Color(0.102, 0.071, 0.043, 1)
+theme_override_fonts/normal_font = ExtResource("6_gochi")
+theme_override_font_sizes/normal_font_size = 17
+text = "Aturan Alat & Bahan"
+
+[node name="RightPagePanel" type="PanelContainer" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox/BookPagesHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_book_page")
+
+[node name="MarginContainer" type="MarginContainer" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox/BookPagesHBox/RightPagePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="RightPageText" type="RichTextLabel" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox/BookPagesHBox/RightPagePanel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/default_color = Color(0.102, 0.071, 0.043, 1)
+theme_override_fonts/normal_font = ExtResource("6_gochi")
+theme_override_font_sizes/normal_font_size = 17
+text = "Aturan Bahan Jadi"
+
+[node name="CloseBookRow" type="HBoxContainer" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="CloseBookButton" type="Button" parent="BookPopup/CenterContainer/BookModalPanel/MarginContainer/BookVBox/CloseBookRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_brown_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_brown_btn")
+theme_override_styles/focus = SubResource("StyleBoxFlat_brown_btn_hover")
+text = "Tutup Panduan"

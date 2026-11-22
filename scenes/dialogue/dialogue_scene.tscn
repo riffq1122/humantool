@@ -1,0 +1,213 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scenes/dialogue/dialogue_scene.gd" id="1_dialogue"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/background percakapan.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/alien/Rail flat.png" id="3_alien"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/senyum hmm.png" id="4_player"]
+[ext_resource type="FontFile" path="res://assets/fonts/Love_Ya_Like_A_Sister/LoveYaLikeASister-Regular.ttf" id="5_love"]
+[ext_resource type="FontFile" path="res://assets/fonts/Gochi_Hand/GochiHand-Regular.ttf" id="6_gochi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialogue_box"]
+bg_color = Color(0.06, 0.06, 0.06, 0.84)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.14)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skip_normal"]
+bg_color = Color(0.722, 0.741, 0.761, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.443, 0.471, 1)
+corner_radius_top_left = 27
+corner_radius_top_right = 27
+corner_radius_bottom_right = 27
+corner_radius_bottom_left = 27
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skip_hover"]
+bg_color = Color(0.812, 0.831, 0.851, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.2, 0.22, 1)
+corner_radius_top_left = 27
+corner_radius_top_right = 27
+corner_radius_bottom_right = 27
+corner_radius_bottom_left = 27
+shadow_color = Color(0, 0, 0, 0.42)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skip_pressed"]
+bg_color = Color(0.612, 0.635, 0.659, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.28, 0.3, 0.33, 1)
+corner_radius_top_left = 27
+corner_radius_top_right = 27
+corner_radius_bottom_right = 27
+corner_radius_bottom_left = 27
+
+[node name="DialogueScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dialogue")
+
+[node name="BackgroundTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CharactersLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="AlienSprite" type="TextureRect" parent="CharactersLayer"]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = -118.0
+offset_top = 26.0
+offset_right = 562.0
+offset_bottom = 706.0
+mouse_filter = 2
+texture = ExtResource("3_alien")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerSprite" type="TextureRect" parent="CharactersLayer"]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 740.0
+offset_top = 48.0
+offset_right = 1420.0
+offset_bottom = 728.0
+mouse_filter = 2
+texture = ExtResource("4_player")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DialogueBoxPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -300.0
+offset_right = -24.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialogue_box")
+
+[node name="MarginContainer" type="MarginContainer" parent="DialogueBoxPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 18
+
+[node name="DialogueVBox" type="VBoxContainer" parent="DialogueBoxPanel/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="SpeakerNameLabel" type="Label" parent="DialogueBoxPanel/MarginContainer/DialogueVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.851, 0.49, 1)
+theme_override_fonts/font = ExtResource("5_love")
+theme_override_font_sizes/font_size = 24
+text = "Ilmuan"
+
+[node name="DialogueTextLabel" type="Label" parent="DialogueBoxPanel/MarginContainer/DialogueVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.969, 0.957, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 24
+text = "Dialog percakapan akan tampil di sini."
+autowrap_mode = 3
+
+[node name="BottomHintRow" type="HBoxContainer" parent="DialogueBoxPanel/MarginContainer/DialogueVBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ProgressLabel" type="Label" parent="DialogueBoxPanel/MarginContainer/DialogueVBox/BottomHintRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.839, 0.816, 0.769, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 16
+text = "1 / 1"
+
+[node name="Spacer" type="Control" parent="DialogueBoxPanel/MarginContainer/DialogueVBox/BottomHintRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="ContinueHintLabel" type="Label" parent="DialogueBoxPanel/MarginContainer/DialogueVBox/BottomHintRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.839, 0.816, 0.769, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 17
+text = "Klik / Spasi / Skip"
+horizontal_alignment = 2
+
+[node name="SkipButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -174.0
+offset_top = 14.0
+offset_right = -26.0
+offset_bottom = 68.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.067, 0.067, 0.067, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.067, 0.067, 0.067, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_skip_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_skip_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_skip_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_skip_hover")
+text = "Skip"

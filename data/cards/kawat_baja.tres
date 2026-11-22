@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+
+[resource]
+script = ExtResource("1_card")
+card_id = &"kawat_baja"
+display_name = "Kawat Baja"
+category = 0
+description = "Kawat baja tipis yang dapat diasah menjadi jarum atau alat jahit."
+consumable = true

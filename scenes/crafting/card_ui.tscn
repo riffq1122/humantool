@@ -1,0 +1,201 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scenes/crafting/card_ui.gd" id="1_card_ui"]
+[ext_resource type="FontFile" path="res://assets/fonts/Gochi_Hand/GochiHand-Regular.ttf" id="2_gochi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shadow"]
+bg_color = Color(0, 0, 0, 0.42)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stock_pill"]
+bg_color = Color(0.169, 0.094, 0.039, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.88, 0.72, 0.85)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 6
+content_margin_top = 1
+content_margin_right = 6
+content_margin_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_selection"]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.894, 0.369, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_disabled_scrim"]
+bg_color = Color(0.08, 0.06, 0.05, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="CardUI" type="Control"]
+custom_minimum_size = Vector2(114, 160)
+layout_mode = 3
+anchors_preset = 0
+focus_mode = 2
+mouse_default_cursor_shape = 2
+script = ExtResource("1_card_ui")
+
+[node name="VisualCard" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DropShadow" type="Panel" parent="VisualCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = 4.0
+offset_right = 2.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_shadow")
+
+[node name="CardArtTexture" type="TextureRect" parent="VisualCard"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DynamicOverlay" type="MarginContainer" parent="VisualCard"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="OverlayVBox" type="VBoxContainer" parent="VisualCard/DynamicOverlay"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="IconTexture" type="TextureRect" parent="VisualCard/DynamicOverlay/OverlayVBox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="VisualCard/DynamicOverlay/OverlayVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_gochi")
+theme_override_font_sizes/font_size = 17
+text = "Kawat Baja"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StockPill" type="PanelContainer" parent="VisualCard"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -38.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = 29.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_stock_pill")
+
+[node name="StockBadge" type="Label" parent="VisualCard/StockPill"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("2_gochi")
+theme_override_font_sizes/font_size = 14
+text = "x3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SelectionHighlight" type="Panel" parent="VisualCard"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_selection")
+
+[node name="DisabledScrim" type="Panel" parent="VisualCard"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_disabled_scrim")
+
+[node name="DisabledLabel" type="Label" parent="VisualCard/DisabledScrim"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -14.0
+offset_right = 32.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_colors/font_outline_color = Color(0.102, 0.071, 0.043, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("2_gochi")
+theme_override_font_sizes/font_size = 18
+text = "HABIS"
+horizontal_alignment = 1
+vertical_alignment = 1

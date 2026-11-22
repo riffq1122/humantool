@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/recipe_data.gd" id="1_recipe"]
+
+[resource]
+script = ExtResource("1_recipe")
+recipe_id = &"cermin"
+recipe_name = "Buat Cermin"
+required_cards = Array[StringName]([&"perak_batangan", &"kaca", &"cetakan"])
+allow_extra_cards = false
+consume_process = false
+consume_tools = Array[StringName]([])
+outputs = Array[StringName]([&"cermin"])
+stem_explanation = "Perak Batangan melapisi bagian belakang Kaca di dalam Cetakan sehingga cahaya dapat dipantulkan sempurna sebagai Cermin."

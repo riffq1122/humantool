@@ -1,0 +1,82 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scenes/crafting/card_hand.gd" id="1_card_hand"]
+[ext_resource type="Script" path="res://scenes/crafting/refresh_icon.gd" id="2_refresh_icon"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hand_tray"]
+bg_color = Color(0.953, 0.902, 0.8, 0.3)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.96, 0.88, 0.38)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_refresh_normal"]
+bg_color = Color(1, 0.96, 0.88, 0.14)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_refresh_hover"]
+bg_color = Color(1, 0.96, 0.88, 0.36)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.306, 0.153, 0.035, 0.8)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="CardHand" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 194)
+theme_override_styles/panel = SubResource("StyleBoxFlat_hand_tray")
+script = ExtResource("1_card_hand")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="DeckHBox" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RefreshCenter" type="CenterContainer" parent="MarginContainer/DeckHBox"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+
+[node name="RefreshButton" type="Button" parent="MarginContainer/DeckHBox/RefreshCenter"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+tooltip_text = "Acak ulang kartu dari pool"
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_refresh_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_refresh_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_refresh_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_refresh_hover")
+
+[node name="RefreshIcon" type="Control" parent="MarginContainer/DeckHBox/RefreshCenter/RefreshButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_refresh_icon")
+
+[node name="CardsStage" type="Control" parent="MarginContainer/DeckHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

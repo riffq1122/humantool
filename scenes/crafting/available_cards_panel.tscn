@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://dfarck2rnt1sk"]
+
+[ext_resource type="Script" path="res://scenes/crafting/available_cards_panel.gd" id="1_avail"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.145, 0.173, 0.157, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.243, 0.29, 0.263, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="AvailableCardsPanel" type="PanelContainer" unique_id=503791058]
+custom_minimum_size = Vector2(280, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+script = ExtResource("1_avail")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1124844298]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1073547203]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HeaderLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=807028419]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.953, 0.933, 0.894, 1)
+theme_override_font_sizes/font_size = 18
+text = "Kartu Tersedia"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=1069227657]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="CategoryVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=407788165]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="MaterialHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/CategoryVBox" unique_id=1193001844]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.878, 0.62, 0.369, 1)
+theme_override_font_sizes/font_size = 14
+text = "Material"
+
+[node name="EmptyMaterialLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/CategoryVBox" unique_id=678135340]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.72, 0.67, 1)
+theme_override_font_sizes/font_size = 12
+text = "Belum ada material tersedia."
+
+[node name="MaterialList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/CategoryVBox" unique_id=1406097531]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ProcessHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/CategoryVBox" unique_id=194114686]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.459, 0.745, 0.651, 1)
+theme_override_font_sizes/font_size = 14
+text = "Process"
+
+[node name="ProcessList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/CategoryVBox" unique_id=873995400]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ToolHeader" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/CategoryVBox" unique_id=1569767915]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.514, 0.698, 0.855, 1)
+theme_override_font_sizes/font_size = 14
+text = "Tool (Tidak Habis Pakai)"
+
+[node name="ToolList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/CategoryVBox" unique_id=293314011]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8

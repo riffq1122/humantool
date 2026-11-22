@@ -15,13 +15,11 @@ res://
 │   │   └── sfx/                # Efek suara (.wav / .ogg)
 │   └── fonts/                  # Font (.ttf / .otf)
 ├── scenes/                     # Semua scene Godot (.tscn)
-│   ├── main/                   # Root scene (main.tscn & main.gd) — entry point game
-│   ├── player/                 # Scene player
-│   ├── npc/                    # Scene NPC
-│   ├── gameplay/
-│   │   ├── card_puzzle/        # Scene gameplay card puzzle
-│   │   └── crafting/           # Scene gameplay crafting
-│   └── ui/                     # Main menu, HUD, pause menu, dialog UI
+│   ├── main/                   # Root scene (main.tscn & main.gd), entry point game
+│   ├── dialogue/               # Visual Novel dialogue scene, UI, dan choice button
+│   ├── crafting/               # Meja crafting top-down, card puzzle, dan assembly grid
+│   ├── npc/                    # Portrait NPC
+│   └── ui/                     # Inventory dan komponen UI bersama
 ├── scripts/                    # Script GDScript (.gd)
 │   ├── managers/               # Manager / autoload global
 │   ├── systems/                # Sistem gameplay (crafting, puzzle, cerita)

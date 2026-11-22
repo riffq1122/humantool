@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://61y1eivw1d2n"]
+
+[ext_resource type="Script" uid="uid://dt0opwg4npnbj" path="res://scripts/systems/failure_outcome_data.gd" id="1_qmnv1"]
+[ext_resource type="Script" uid="uid://baa3n183fuwdl" path="res://scripts/systems/recipe_data.gd" id="1_recipe_data"]
+
+[resource]
+script = ExtResource("1_recipe_data")
+recipe_id = &"reprocess_crushed_iron"
+recipe_name = "Reprocess Crushed Iron Ore"
+required_cards = Array[StringName]([&"crushed_iron_ore", &"coal", &"furnace", &"smelting"])
+outputs = Array[StringName]([&"iron_ingot"])
+stem_explanation = "Crushed Iron Ore tetap bisa diselamatkan: panas dari Coal dan Furnace saat Smelting melelehkan serpihan bijih menjadi Iron Ingot murni."
