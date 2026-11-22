@@ -1,14 +1,12 @@
-[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://b0gtpq33kk3y4"]
 
-[ext_resource type="Script" path="res://scripts/systems/recipe_data.gd" id="1_recipe"]
+[ext_resource type="Script" uid="uid://dt0opwg4npnbj" path="res://scripts/systems/failure_outcome_data.gd" id="1_p1fei"]
+[ext_resource type="Script" uid="uid://baa3n183fuwdl" path="res://scripts/systems/recipe_data.gd" id="1_recipe"]
 
 [resource]
 script = ExtResource("1_recipe")
 recipe_id = &"alat_jahit"
 recipe_name = "Buat Alat Jahit"
 required_cards = Array[StringName]([&"kawat_baja", &"amplas", &"batu_asah"])
-allow_extra_cards = false
-consume_process = false
-consume_tools = Array[StringName]([])
 outputs = Array[StringName]([&"alat_jahit"])
-stem_explanation = "Gesekan terarah pada proses Amplas dengan Batu Asah meruncingkan Kawat Baja menjadi Alat Jahit."
+stem_explanation = "Gesekan terarah saat Mengasah menggunakan Alat Amplas meruncingkan Kawat Baja menjadi Alat Jahit."

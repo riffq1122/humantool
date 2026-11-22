@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://ecpn6o7ryjuj"]
 
-[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Script" uid="uid://da1fxfh4lpkb1" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" uid="uid://b1pmrf0p0qxcw" path="res://assets/items/1 alat tenun.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_card")
 card_id = &"alat_tenun"
 display_name = "Alat Tenun"
 category = 2
-description = "Perangkat mekanis untuk menjaga ketegangan benang saat proses tenun."
+description = "Perangkat mekanis untuk menjaga ketegangan benang saat proses menenun."
+icon = ExtResource("2_icon")
 consumable = false

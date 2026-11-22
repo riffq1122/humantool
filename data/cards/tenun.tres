@@ -1,11 +1,15 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://du7s1rbsmry3p"]
 
-[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Script" uid="uid://da1fxfh4lpkb1" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" uid="uid://dxsfr7n2yt561" path="res://assets/card/menenun.png" id="2_card_tex"]
+[ext_resource type="Texture2D" uid="uid://b1pmrf0p0qxcw" path="res://assets/items/1 alat tenun.png" id="3_icon"]
 
 [resource]
 script = ExtResource("1_card")
 card_id = &"tenun"
-display_name = "Tenun"
+display_name = "Menenun"
 category = 1
 description = "Proses menyilangkan benang lungsin dan pakan hingga membentuk struktur kain."
+card_texture = ExtResource("2_card_tex")
+icon = ExtResource("3_icon")
 consumable = false

@@ -7,21 +7,24 @@ signal hover_changed(card_ui: CardUI, hovered: bool)
 const LIFT_OFFSET_SELECTED := -14.0
 const LIFT_OFFSET_HOVER := -10.0
 const SCALE_IDLE := Vector2.ONE
-const SCALE_HOVER := Vector2(1.07, 1.07)
-const SCALE_SELECTED := Vector2(1.04, 1.04)
+const SCALE_HOVER := Vector2(1.06, 1.06)
+const SCALE_SELECTED := Vector2(1.03, 1.03)
 const ANIM_SPEED := 14.0
 
-const BLANK_MATERIAL_TEX: Texture2D = preload("res://assets/card/Group 32.png")
-const BLANK_TOOL_TEX: Texture2D = preload("res://assets/card/Group 34.png")
-const BLANK_ACTION_TEX: Texture2D = preload("res://assets/card/Group 36.png")
+const COLOR_MATERIAL_BG := Color("#9A4E24")
+const COLOR_PROCESS_BG := Color("#E5B218")
+const COLOR_TOOL_BG := Color("#5E7083")
+const COLOR_FINAL_BG := Color("#67549C")
+const FINAL_ITEM_IDS: Array[StringName] = [&"baju", &"cermin", &"lipstik"]
 
 @onready var visual_card: Control = %VisualCard
-@onready var card_art_texture: TextureRect = %CardArtTexture
-@onready var dynamic_overlay: MarginContainer = %DynamicOverlay
-@onready var icon_texture: TextureRect = %IconTexture
-@onready var name_label: Label = %NameLabel
+@onready var card_outer_frame: PanelContainer = %CardOuterFrame
+@onready var content_margin: MarginContainer = %ContentMargin
+@onready var category_tag_label: Label = %CategoryTagLabel
 @onready var stock_pill: PanelContainer = %StockPill
 @onready var stock_badge: Label = %StockBadge
+@onready var icon_texture: TextureRect = %IconTexture
+@onready var name_label: Label = %NameLabel
 @onready var selection_highlight: Panel = %SelectionHighlight
 @onready var disabled_scrim: Panel = %DisabledScrim
 
@@ -80,7 +83,7 @@ func _process(delta: float) -> void:
 func setup_card(p_card_data: CardData, p_stock_count: int = -1) -> void:
 	_static_display = false
 	_is_mini_display = false
-	custom_minimum_size = Vector2(114, 160)
+	custom_minimum_size = Vector2(122, 172)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	focus_mode = Control.FOCUS_ALL
 	card_data = p_card_data
@@ -95,7 +98,7 @@ func setup_card(p_card_data: CardData, p_stock_count: int = -1) -> void:
 		_refresh_visuals(false)
 
 
-# Reuse the exact same card artwork and blank-frame fallback inside combine slots and storage mini-cards.
+# Reuse the exact same card layout inside combine slots and storage mini-cards.
 func set_static_display(p_card_data: CardData, p_stock_count: int = -1, p_mini: bool = false) -> void:
 	_static_display = true
 	_is_mini_display = p_mini
@@ -181,13 +184,47 @@ func _refresh_visuals(animate: bool) -> void:
 
 	tooltip_text = card_data.description
 
-	if card_data.card_texture != null:
-		card_art_texture.texture = card_data.card_texture
-		dynamic_overlay.visible = false
+	var is_final := FINAL_ITEM_IDS.has(card_data.card_id)
+	var is_yellow := card_data.category == CardData.Category.PROCESS and not is_final
+	var bg_col := _resolve_card_bg_color(card_data, is_final)
+
+	var frame_style := StyleBoxFlat.new()
+	frame_style.bg_color = bg_col
+	frame_style.border_color = Color("#120D09")
+	frame_style.set_border_width_all(3)
+	frame_style.set_corner_radius_all(13)
+	card_outer_frame.add_theme_stylebox_override("panel", frame_style)
+
+	category_tag_label.text = _resolve_category_tag(card_data.category, is_final)
+	category_tag_label.add_theme_color_override("font_color", Color("#1A1408") if is_yellow else Color("#FFF8EE"))
+
+	name_label.text = card_data.display_name
+	icon_texture.texture = card_data.icon if card_data.icon != null else card_data.card_texture
+
+	if _is_mini_display:
+		content_margin.add_theme_constant_override("margin_left", 5)
+		content_margin.add_theme_constant_override("margin_right", 5)
+		content_margin.add_theme_constant_override("margin_top", 4)
+		content_margin.add_theme_constant_override("margin_bottom", 5)
+		category_tag_label.add_theme_font_size_override("font_size", 9)
+		stock_badge.add_theme_font_size_override("font_size", 11)
+		name_label.add_theme_font_size_override("font_size", 13)
+	elif _static_display:
+		content_margin.add_theme_constant_override("margin_left", 7)
+		content_margin.add_theme_constant_override("margin_right", 7)
+		content_margin.add_theme_constant_override("margin_top", 6)
+		content_margin.add_theme_constant_override("margin_bottom", 7)
+		category_tag_label.add_theme_font_size_override("font_size", 12)
+		stock_badge.add_theme_font_size_override("font_size", 14)
+		name_label.add_theme_font_size_override("font_size", 18)
 	else:
-		card_art_texture.texture = _get_blank_frame_texture(card_data.category)
-		dynamic_overlay.visible = true
-		_style_dynamic_overlay(card_data)
+		content_margin.add_theme_constant_override("margin_left", 6)
+		content_margin.add_theme_constant_override("margin_right", 6)
+		content_margin.add_theme_constant_override("margin_top", 5)
+		content_margin.add_theme_constant_override("margin_bottom", 6)
+		category_tag_label.add_theme_font_size_override("font_size", 11)
+		stock_badge.add_theme_font_size_override("font_size", 13)
+		name_label.add_theme_font_size_override("font_size", 14)
 
 	if card_data.category == CardData.Category.MATERIAL and _stock_count >= 0:
 		stock_pill.visible = true
@@ -198,10 +235,10 @@ func _refresh_visuals(animate: bool) -> void:
 	disabled_scrim.visible = _is_disabled
 	if _is_disabled:
 		mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
-		card_art_texture.modulate = Color(0.75, 0.75, 0.75, 1.0)
+		card_outer_frame.modulate = Color(0.75, 0.75, 0.75, 1.0)
 	else:
 		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		card_art_texture.modulate = Color.WHITE
+		card_outer_frame.modulate = Color.WHITE
 
 	_update_z_index()
 	_update_highlight_border()
@@ -213,44 +250,30 @@ func _refresh_visuals(animate: bool) -> void:
 		visual_card.scale = SCALE_SELECTED if _is_selected else SCALE_IDLE
 
 
-func _style_dynamic_overlay(data: CardData) -> void:
-	var is_yellow := data.category == CardData.Category.PROCESS
-	var text_col := Color("#1E190A") if is_yellow else Color("#FFFDF7")
-	var outline_col := Color("#FFE680") if is_yellow else Color("#1A120B")
-
-	name_label.text = data.display_name
-	name_label.add_theme_color_override("font_color", text_col)
-	name_label.add_theme_color_override("font_outline_color", outline_col)
-	name_label.add_theme_constant_override("outline_size", 2 if is_yellow else 3)
-
-	if _is_mini_display or (size.x > 0.0 and size.x < 100.0):
-		dynamic_overlay.add_theme_constant_override("margin_left", 16)
-		dynamic_overlay.add_theme_constant_override("margin_right", 16)
-		name_label.add_theme_font_size_override("font_size", 11)
-		icon_texture.custom_minimum_size = Vector2(26, 26)
-	else:
-		dynamic_overlay.add_theme_constant_override("margin_left", 20)
-		dynamic_overlay.add_theme_constant_override("margin_right", 20)
-		name_label.add_theme_font_size_override("font_size", 14)
-		icon_texture.custom_minimum_size = Vector2(44, 44)
-
-	if data.icon != null:
-		icon_texture.texture = data.icon
-		icon_texture.visible = true
-	else:
-		icon_texture.texture = null
-		icon_texture.visible = false
+func _resolve_card_bg_color(data: CardData, is_final: bool) -> Color:
+	if is_final:
+		return COLOR_FINAL_BG
+	match data.category:
+		CardData.Category.MATERIAL:
+			return COLOR_MATERIAL_BG
+		CardData.Category.PROCESS:
+			return COLOR_PROCESS_BG
+		CardData.Category.TOOL:
+			return COLOR_TOOL_BG
+	return COLOR_MATERIAL_BG
 
 
-func _get_blank_frame_texture(category: CardData.Category) -> Texture2D:
+func _resolve_category_tag(category: CardData.Category, is_final: bool) -> String:
+	if is_final:
+		return "ITEM"
 	match category:
 		CardData.Category.MATERIAL:
-			return BLANK_MATERIAL_TEX
+			return "MATERIAL"
 		CardData.Category.PROCESS:
-			return BLANK_ACTION_TEX
+			return "ACTION"
 		CardData.Category.TOOL:
-			return BLANK_TOOL_TEX
-	return BLANK_MATERIAL_TEX
+			return "TOOL"
+	return "KARTU"
 
 
 func _update_z_index() -> void:

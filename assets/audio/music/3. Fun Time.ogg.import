@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dty63hf2vkxcr"
+path="res://.godot/imported/3. Fun Time.ogg-8724a15ba23a68800c18395e6c5bf2ae.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/audio/music/3. Fun Time.ogg"
+dest_files=["res://.godot/imported/3. Fun Time.ogg-8724a15ba23a68800c18395e6c5bf2ae.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

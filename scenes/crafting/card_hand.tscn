@@ -35,7 +35,7 @@ corner_radius_bottom_right = 18
 corner_radius_bottom_left = 18
 
 [node name="CardHand" type="PanelContainer"]
-custom_minimum_size = Vector2(0, 194)
+custom_minimum_size = Vector2(0, 202)
 theme_override_styles/panel = SubResource("StyleBoxFlat_hand_tray")
 script = ExtResource("1_card_hand")
 

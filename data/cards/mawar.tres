@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" path="res://assets/items/mawardi.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_card")
+card_id = &"mawar"
+display_name = "Mawar"
+category = 0
+description = "Kelopak bunga mawar segar yang bisa ditumbuk di mortar menjadi pigmen pewarna alami."
+icon = ExtResource("2_icon")
+consumable = true

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b4nho0f8eya32"
+path="res://.godot/imported/2. Green Field.ogg-eccd6b3d24d3ecb91f2f96cd83bffc37.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/audio/music/2. Green Field.ogg"
+dest_files=["res://.godot/imported/2. Green Field.ogg-eccd6b3d24d3ecb91f2f96cd83bffc37.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

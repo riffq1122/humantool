@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://clhbet7i7a1pk"]
 
 [ext_resource type="Script" path="res://scenes/crafting/result_panel.gd" id="1_result"]
 
@@ -14,30 +14,30 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="ResultPanel" type="PanelContainer"]
+[node name="ResultPanel" type="PanelContainer" unique_id=615834244]
 custom_minimum_size = Vector2(360, 0)
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_res_panel")
 script = ExtResource("1_result")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1057641125]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1159059166]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="HeaderLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="HeaderLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=738618878]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.953, 0.933, 0.894, 1)
 theme_override_font_sizes/font_size = 18
 text = "Informasi Resep & Feedback"
 
-[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1680037630]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.796, 0.769, 0.714, 1)
@@ -45,7 +45,7 @@ theme_override_font_sizes/font_size = 14
 text = "Status: Siap Meracik"
 autowrap_mode = 3
 
-[node name="OutputLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="OutputLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=219783993]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.953, 0.933, 0.894, 1)
@@ -53,7 +53,7 @@ theme_override_font_sizes/font_size = 15
 text = "Output: -"
 autowrap_mode = 3
 
-[node name="InventoryStockLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="InventoryStockLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1203527747]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.796, 0.769, 0.714, 1)
@@ -61,7 +61,7 @@ theme_override_font_sizes/font_size = 13
 text = "Hasil di Inventory: Iron Ingot x0"
 autowrap_mode = 3
 
-[node name="FeedbackText" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+[node name="FeedbackText" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=103402745]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3

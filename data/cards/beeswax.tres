@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" path="res://assets/items/lilin lebah.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_card")
+card_id = &"beeswax"
+display_name = "Beeswax"
+category = 0
+description = "Sarang lilin lebah mentah yang dapat dilebur di tungku untuk menghasilkan lilin."
+icon = ExtResource("2_icon")
+consumable = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scenes/crafting/crafting_scene.gd" id="1_crafting_scene"]
 [ext_resource type="Script" path="res://scripts/managers/inventory_manager.gd" id="2_inv_mgr"]
@@ -7,10 +7,8 @@
 [ext_resource type="Script" path="res://scenes/crafting/gear_icon.gd" id="5_gear_icon"]
 [ext_resource type="FontFile" path="res://assets/fonts/Gochi_Hand/GochiHand-Regular.ttf" id="6_gochi"]
 [ext_resource type="FontFile" path="res://assets/fonts/Love_Ya_Like_A_Sister/LoveYaLikeASister-Regular.ttf" id="7_love"]
-[ext_resource type="Texture2D" path="res://assets/card/Group 36.png" id="8_tpl_action"]
-[ext_resource type="Texture2D" path="res://assets/card/Group 34.png" id="9_tpl_tool"]
-[ext_resource type="Texture2D" path="res://assets/card/Group 32.png" id="10_tpl_material"]
-[ext_resource type="PackedScene" path="res://scenes/crafting/card_ui.tscn" id="11_card_ui"]
+[ext_resource type="PackedScene" path="res://scenes/crafting/card_ui.tscn" id="8_card_ui"]
+[ext_resource type="Texture2D" path="res://assets/card/Baju.png" id="9_baju_card"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gear_btn"]
 bg_color = Color(0.18, 0.09, 0.03, 0.45)
@@ -104,17 +102,22 @@ content_margin_right = 18
 content_margin_bottom = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_normal"]
-draw_center = false
+bg_color = Color(0, 0, 0, 0.25)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.05, 0.03, 0.02, 0.88)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
-shadow_color = Color(0, 0, 0, 0.42)
-shadow_size = 7
-shadow_offset = Vector2(-5, 7)
+shadow_color = Color(0, 0, 0, 0.32)
+shadow_size = 6
+shadow_offset = Vector2(-4, 6)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_hover"]
-draw_center = false
+bg_color = Color(0, 0, 0, 0.32)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -124,9 +127,46 @@ corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
-shadow_color = Color(0, 0, 0, 0.45)
+shadow_color = Color(0, 0, 0, 0.38)
 shadow_size = 7
-shadow_offset = Vector2(-5, 7)
+shadow_offset = Vector2(-4, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar_circle"]
+bg_color = Color(0.91, 0.91, 0.91, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.14, 0.08, 0.03, 1)
+corner_radius_top_left = 36
+corner_radius_top_right = 36
+corner_radius_bottom_right = 36
+corner_radius_bottom_left = 36
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 4
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar_inner_clip"]
+bg_color = Color(0.92, 0.92, 0.92, 1)
+corner_radius_top_left = 33
+corner_radius_top_right = 33
+corner_radius_bottom_right = 33
+corner_radius_bottom_left = 33
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tutorial_pill"]
+bg_color = Color(0.878, 0.871, 0.859, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.14, 0.08, 0.03, 0.85)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0, 0, 0, 0.28)
+shadow_size = 4
+shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_combine_pill"]
 bg_color = Color(0.769, 0.416, 0.082, 1)
@@ -225,6 +265,62 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spotlight_ring"]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.894, 0.369, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(1, 0.85, 0.25, 0.45)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reset_pill"]
+bg_color = Color(0.42, 0.22, 0.125, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.086, 0.035, 0.9)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+shadow_color = Color(0, 0, 0, 0.38)
+shadow_size = 5
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reset_pill_hover"]
+bg_color = Color(0.51, 0.278, 0.165, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.894, 0.369, 1)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+shadow_color = Color(0, 0, 0, 0.42)
+shadow_size = 6
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reset_pill_disabled"]
+bg_color = Color(0.29, 0.18, 0.125, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.11, 0.075, 0.7)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+
 [node name="CraftingScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -284,13 +380,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 14
+theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 18
+theme_override_constants/margin_bottom = 14
 
 [node name="TableVBox" type="VBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 
 [node name="TopHeaderRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox"]
 layout_mode = 2
@@ -298,7 +394,7 @@ theme_override_constants/separation = 14
 
 [node name="SettingsButton" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TopHeaderRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 tooltip_text = "Pengaturan & Navigasi"
 mouse_default_cursor_shape = 2
@@ -328,13 +424,13 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.969, 0.949, 0.91, 1)
 theme_override_fonts/font = ExtResource("6_gochi")
-theme_override_font_sizes/font_size = 17
-text = "Pilih 3 kartu dari deck bawah, lalu tekan combine."
+theme_override_font_sizes/font_size = 16
+text = "Pilih 3 kartu dari deck bawah, lalu tekan gabungkan."
 autowrap_mode = 3
 
 [node name="BookButton" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TopHeaderRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(126, 44)
+custom_minimum_size = Vector2(126, 42)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Buka buku panduan resep"
@@ -353,7 +449,7 @@ text = "Panduan"
 [node name="CenterStageRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 34
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="YouGetCenter" type="CenterContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow"]
@@ -361,20 +457,20 @@ layout_mode = 2
 
 [node name="YouGetFrame" type="PanelContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(162, 224)
+custom_minimum_size = Vector2(154, 212)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_preview_card")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 12
+theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 
 [node name="PreviewPillCenter" type="CenterContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -398,7 +494,7 @@ size_flags_vertical = 3
 [node name="YouGetItemTexture" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/YouGetCenter/YouGetFrame/MarginContainer/VBoxContainer/PreviewContentCenter"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(96, 96)
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
@@ -408,7 +504,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.102, 0.078, 0.063, 1)
 theme_override_fonts/font = ExtResource("6_gochi")
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 32
 text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -424,6 +520,7 @@ horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="CombineSlotsRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 22
@@ -431,7 +528,7 @@ alignment = 1
 
 [node name="CombineSlot0" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(144, 202)
+custom_minimum_size = Vector2(138, 194)
 layout_mode = 2
 size_flags_vertical = 4
 disabled = true
@@ -442,20 +539,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_slot_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_slot_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_slot_hover")
 
-[node name="EmptyTemplate" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot0"]
-modulate = Color(0.92, 0.92, 0.92, 0.9)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("8_tpl_action")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot0" instance=ExtResource("11_card_ui")]
+[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot0" instance=ExtResource("8_card_ui")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -466,7 +550,7 @@ grow_vertical = 2
 
 [node name="CombineSlot1" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(144, 202)
+custom_minimum_size = Vector2(138, 194)
 layout_mode = 2
 size_flags_vertical = 4
 disabled = true
@@ -477,20 +561,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_slot_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_slot_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_slot_hover")
 
-[node name="EmptyTemplate" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot1"]
-modulate = Color(0.92, 0.92, 0.92, 0.9)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("9_tpl_tool")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot1" instance=ExtResource("11_card_ui")]
+[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot1" instance=ExtResource("8_card_ui")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -501,7 +572,7 @@ grow_vertical = 2
 
 [node name="CombineSlot2" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(144, 202)
+custom_minimum_size = Vector2(138, 194)
 layout_mode = 2
 size_flags_vertical = 4
 disabled = true
@@ -512,20 +583,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_slot_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_slot_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_slot_hover")
 
-[node name="EmptyTemplate" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot2"]
-modulate = Color(0.92, 0.92, 0.92, 0.9)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("10_tpl_material")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot2" instance=ExtResource("11_card_ui")]
+[node name="SlotCardView" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CenterStageRow/CombineSlotsRow/CombineSlot2" instance=ExtResource("8_card_ui")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -534,13 +592,93 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="TutorialRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox"]
+unique_name_in_owner = true
+z_index = 70
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TutorialAvatarFrame" type="PanelContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_avatar_circle")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow/TutorialAvatarFrame"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ClipCircle" type="Panel" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow/TutorialAvatarFrame/MarginContainer"]
+clip_children = 2
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avatar_inner_clip")
+
+[node name="TutorialAvatarTexture" type="TextureRect" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow/TutorialAvatarFrame/MarginContainer/ClipCircle"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="TutorialPillPanel" type="PanelContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tutorial_pill")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow/TutorialPillPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow/TutorialPillPanel/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="TutorialTextLabel" type="Label" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow/TutorialPillPanel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.102, 0.078, 0.063, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 16
+text = "Oke, jadi ini adalah meja kerja kita."
+autowrap_mode = 3
+
+[node name="TutorialPromptLabel" type="Label" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/TutorialRow/TutorialPillPanel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.306, 0.153, 0.035, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 14
+text = "[Klik / Spasi]"
+horizontal_alignment = 2
+
 [node name="CombineButtonRow" type="HBoxContainer" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox"]
 layout_mode = 2
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="CombineButton" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CombineButtonRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(204, 48)
+custom_minimum_size = Vector2(204, 46)
 layout_mode = 2
 disabled = true
 mouse_default_cursor_shape = 2
@@ -555,7 +693,27 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_combine_pill_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_combine_pill")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_combine_pill_disabled")
 theme_override_styles/focus = SubResource("StyleBoxFlat_combine_pill_hover")
-text = "combine"
+text = "gabungkan"
+
+[node name="ResetSelectionButton" type="Button" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox/CombineButtonRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(126, 46)
+layout_mode = 2
+disabled = true
+tooltip_text = "Reset kartu yang dipilih di tengah"
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.91, 0.867, 0.816, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_reset_pill")
+theme_override_styles/hover = SubResource("StyleBoxFlat_reset_pill_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_reset_pill")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_reset_pill_disabled")
+theme_override_styles/focus = SubResource("StyleBoxFlat_reset_pill_hover")
+text = "reset"
 
 [node name="CardHand" parent="MainSplitHBox/LeftTableContainer/TableMargin/TableVBox" instance=ExtResource("3_card_hand")]
 unique_name_in_owner = true
@@ -578,6 +736,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="ObjectivePanel" type="PanelContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 254)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_orange_box")
@@ -633,6 +792,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="StorageSection" type="VBoxContainer" parent="MainSplitHBox/RightSidebarPanel/SidebarMargin/RightColumn"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
@@ -674,7 +834,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.102, 0.071, 0.043, 1)
 theme_override_fonts/font = ExtResource("6_gochi")
 theme_override_font_sizes/font_size = 16
-text = "Penyimpanan kosong. Hasil combine akan tersimpan di sini."
+text = "Penyimpanan kosong. Hasil gabungkan akan tersimpan di sini."
 horizontal_alignment = 1
 autowrap_mode = 3
 
@@ -691,6 +851,29 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
 alignment = 1
+
+[node name="TutorialDimOverlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 45
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+color = Color(0, 0, 0, 0.54)
+
+[node name="TutorialSpotlightRing" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 65
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 120.0
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spotlight_ring")
 
 [node name="SettingsPopup" type="Control" parent="."]
 unique_name_in_owner = true
@@ -942,3 +1125,114 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_brown_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_brown_btn")
 theme_override_styles/focus = SubResource("StyleBoxFlat_brown_btn_hover")
 text = "Tutup Panduan"
+
+[node name="LevelCompletePopup" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 120
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Scrim" type="ColorRect" parent="LevelCompletePopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="CenterContainer" type="CenterContainer" parent="LevelCompletePopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelModalPanel" type="PanelContainer" parent="LevelCompletePopup/CenterContainer"]
+custom_minimum_size = Vector2(490, 480)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_frame")
+
+[node name="MarginContainer" type="MarginContainer" parent="LevelCompletePopup/CenterContainer/LevelModalPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="LevelVBox" type="VBoxContainer" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="LevelTitleLabel" type="Label" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.894, 0.369, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 30
+text = "Level Selesai!"
+horizontal_alignment = 1
+
+[node name="LevelSubtitleLabel" type="Label" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 20
+text = "Baju Pertama Berhasil Dibuat!"
+horizontal_alignment = 1
+
+[node name="RewardStageCenter" type="CenterContainer" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox"]
+custom_minimum_size = Vector2(240, 250)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RewardCardPivot" type="Control" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox/RewardStageCenter"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(168, 235)
+layout_mode = 2
+
+[node name="RewardCardTexture" type="TextureRect" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox/RewardStageCenter/RewardCardPivot"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_baju_card")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelCompleteQuoteLabel" type="Label" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.969, 0.957, 0.933, 1)
+theme_override_fonts/font = ExtResource("6_gochi")
+theme_override_font_sizes/font_size = 17
+text = "Tadaa! Ini dia baju pertama yang berhasil kita buat, uhh aku tak yakin apakah kalian bisa mengenakannya."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ContinueButtonCenter" type="HBoxContainer" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="LevelContinueButton" type="Button" parent="LevelCompletePopup/CenterContainer/LevelModalPanel/MarginContainer/LevelVBox/ContinueButtonCenter"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(210, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("7_love")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_combine_pill")
+theme_override_styles/hover = SubResource("StyleBoxFlat_combine_pill_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_combine_pill")
+theme_override_styles/focus = SubResource("StyleBoxFlat_combine_pill_hover")
+text = "Lanjutkan"

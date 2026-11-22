@@ -4,8 +4,105 @@ extends Control
 signal dialogue_requested
 signal craft_completed(result: ProcessingResult)
 
+enum TutorialPhase {
+	INTRO_DIALOGUE,
+	WAIT_SELECT_CARDS,
+	PREVIEW_EXPLAIN_DIALOGUE,
+	WAIT_PRESS_COMBINE,
+	AFTER_FIRST_CRAFT_DIALOGUE,
+	WAIT_ALL_INTERMEDIATES,
+	READY_FOR_BAJU_DIALOGUE,
+	WAIT_CRAFT_BAJU,
+	COMPLETED,
+}
+
 const CARD_UI_SCENE := preload("res://scenes/crafting/card_ui.tscn")
 const FONT_GOCHI := preload("res://assets/fonts/Gochi_Hand/GochiHand-Regular.ttf")
+const PLAYER_SPRITE_TEX := preload("res://assets/sprites/player/senyum hmm.png")
+const RAIL_SPRITE_TEX := preload("res://assets/sprites/alien/Rail flat.png")
+const BAJU_CARD_TEX := preload("res://assets/card/Baju.png")
+const CERMIN_CARD_TEX := preload("res://assets/card/Cermin.png")
+const LIPSTIK_CARD_TEX := preload("res://assets/card/Lipstik.png")
+
+const INTRO_TUTORIAL_LINES: Array[Dictionary] = [
+	{
+		"speaker": "ilmuan",
+		"highlight": "slots",
+		"text": "Oke, jadi ini adalah meja kerja kita. Kita akan membuat berbagai barang disini.",
+	},
+	{
+		"speaker": "rail",
+		"highlight": "",
+		"text": "Oh, seperti kantung ajaib.",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "objective",
+		"text": "Yah, anggaplah begitu. Kau bisa melihat barang apa yang akan kau buat di pojok kanan atas.",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "book",
+		"text": "Lalu tombol Panduan di atas berisi informasi dari bahan, alat dan proses apa saja yang harus digunakan.",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "storage",
+		"text": "Di pojok kanan bawah, terdapat penyimpanan berisi barang yang telah dibuat. Ambil secukupnya saja ya, jangan mubazir.",
+	},
+	{
+		"speaker": "rail",
+		"highlight": "storage",
+		"text": "Mau banjir?",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "",
+		"text": "Mubazir, itu artinya terlalu berlebihan sampai terbuang. Ahk, lanjut-lanjut.",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "hand",
+		"text": "Di bagian bawah ini adalah tempat diletakkannya semua kartu yang tadi kau ambil.",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "hand",
+		"text": "Coba pilih beberapa kartu (Kawat Baja, Mengasah, dan Alat Amplas).",
+	},
+]
+
+const PREVIEW_EXPLAIN_LINE := {
+	"speaker": "ilmuan",
+	"highlight": "preview",
+	"text": "Nah, lihat pada kotak kecil preview di sebelah kiri, hasil kombinasi tadi akan muncul di gambar tersebut. Sekarang coba tekan 'gabungkan'.",
+}
+
+const AFTER_FIRST_CRAFT_LINES: Array[Dictionary] = [
+	{
+		"speaker": "ilmuan",
+		"highlight": "storage",
+		"text": "Nah, ini adalah benda pertama yang berhasil kita buat.",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "objective",
+		"text": "Sekarang coba buat lagi benda lain yang kita butuhkan. Lihat apa yang harus kau buat lagi pada kotak objektif.",
+	},
+]
+
+const READY_FOR_BAJU_LINES: Array[Dictionary] = [
+	{
+		"speaker": "ilmuan",
+		"highlight": "storage",
+		"text": "Baiklah, kita sudah punya ketiga benda utama untuk membuat baju. Ambil ketiga benda yang tadi kita buat di penyimpanan.",
+	},
+	{
+		"speaker": "ilmuan",
+		"highlight": "slots",
+		"text": "Nah sekarang lakukan hal yang sama. Gabungkan ketiga barang tersebut!",
+	},
+]
 
 const DEFAULT_CARDS: Array[CardData] = [
 	preload("res://data/cards/kawat_baja.tres"),
@@ -27,6 +124,17 @@ const DEFAULT_CARDS: Array[CardData] = [
 	preload("res://data/cards/perak_batangan.tres"),
 	preload("res://data/cards/kaca.tres"),
 	preload("res://data/cards/cermin.tres"),
+	preload("res://data/cards/palu.tres"),
+	preload("res://data/cards/menempa.tres"),
+	preload("res://data/cards/menumbuk.tres"),
+	preload("res://data/cards/mortar.tres"),
+	preload("res://data/cards/mawar.tres"),
+	preload("res://data/cards/beeswax.tres"),
+	preload("res://data/cards/cetakan_lipstik.tres"),
+	preload("res://data/cards/lilin.tres"),
+	preload("res://data/cards/pewarna.tres"),
+	preload("res://data/cards/lipstik_batangan.tres"),
+	preload("res://data/cards/lipstik.tres"),
 ]
 
 const DEFAULT_RECIPES: Array[RecipeData] = [
@@ -37,6 +145,10 @@ const DEFAULT_RECIPES: Array[RecipeData] = [
 	preload("res://data/recipes/perak_batangan_recipe.tres"),
 	preload("res://data/recipes/kaca_recipe.tres"),
 	preload("res://data/recipes/cermin_recipe.tres"),
+	preload("res://data/recipes/cetakan_lipstik_recipe.tres"),
+	preload("res://data/recipes/pewarna_recipe.tres"),
+	preload("res://data/recipes/lilin_recipe.tres"),
+	preload("res://data/recipes/lipstik_recipe.tres"),
 ]
 
 const OBJECTIVE_SEQUENCE: Array[StringName] = [
@@ -44,6 +156,19 @@ const OBJECTIVE_SEQUENCE: Array[StringName] = [
 	&"kain",
 	&"gunting",
 	&"baju",
+]
+
+const STAGE2_OBJECTIVE_SEQUENCE: Array[StringName] = [
+	&"perak_batangan",
+	&"kaca",
+	&"cermin",
+]
+
+const STAGE3_OBJECTIVE_SEQUENCE: Array[StringName] = [
+	&"cetakan_lipstik",
+	&"pewarna",
+	&"lilin",
+	&"lipstik",
 ]
 
 const STORAGE_OUTPUT_IDS: Array[StringName] = [
@@ -54,6 +179,10 @@ const STORAGE_OUTPUT_IDS: Array[StringName] = [
 	&"perak_batangan",
 	&"kaca",
 	&"cermin",
+	&"cetakan_lipstik",
+	&"pewarna",
+	&"lilin",
+	&"lipstik",
 ]
 
 const OBJECTIVE_DECK_POOLS: Dictionary = {
@@ -95,6 +224,75 @@ const OBJECTIVE_DECK_POOLS: Dictionary = {
 	],
 }
 
+const STAGE2_DECK_POOLS: Dictionary = {
+	&"perak_batangan": [
+		&"biji_perak",
+		&"peleburan",
+		&"tungku",
+		&"pasir_silica",
+		&"menempa",
+		&"palu",
+		&"cetakan",
+	],
+	&"kaca": [
+		&"pasir_silica",
+		&"peleburan",
+		&"tungku",
+		&"biji_perak",
+		&"menempa",
+		&"palu",
+		&"cetakan",
+	],
+	&"cermin": [
+		&"cetakan",
+		&"peleburan",
+		&"tungku",
+		&"menempa",
+		&"palu",
+		&"biji_perak",
+		&"pasir_silica",
+	],
+}
+
+const STAGE3_DECK_POOLS: Dictionary = {
+	&"cetakan_lipstik": [
+		&"besi_batangan",
+		&"peleburan",
+		&"tungku",
+		&"mawar",
+		&"menumbuk",
+		&"mortar",
+		&"beeswax",
+	],
+	&"pewarna": [
+		&"mawar",
+		&"menumbuk",
+		&"mortar",
+		&"beeswax",
+		&"peleburan",
+		&"tungku",
+		&"besi_batangan",
+	],
+	&"lilin": [
+		&"beeswax",
+		&"peleburan",
+		&"tungku",
+		&"mawar",
+		&"menumbuk",
+		&"mortar",
+		&"besi_batangan",
+	],
+	&"lipstik": [
+		&"besi_batangan",
+		&"mawar",
+		&"beeswax",
+		&"peleburan",
+		&"menumbuk",
+		&"tungku",
+		&"mortar",
+	],
+}
+
 @export var card_catalog: Array[CardData] = []
 @export var recipes: Array[RecipeData] = []
 
@@ -106,15 +304,25 @@ const OBJECTIVE_DECK_POOLS: Dictionary = {
 @onready var you_get_item_texture: TextureRect = %YouGetItemTexture
 @onready var you_get_star_label: Label = %YouGetStarLabel
 @onready var you_get_item_label: Label = %YouGetItemLabel
+@onready var combine_slots_row: HBoxContainer = %CombineSlotsRow
 @onready var combine_slot_0: Button = %CombineSlot0
 @onready var combine_slot_1: Button = %CombineSlot1
 @onready var combine_slot_2: Button = %CombineSlot2
+@onready var tutorial_avatar_texture: TextureRect = %TutorialAvatarTexture
+@onready var tutorial_pill_panel: PanelContainer = %TutorialPillPanel
+@onready var tutorial_text_label: Label = %TutorialTextLabel
+@onready var tutorial_prompt_label: Label = %TutorialPromptLabel
 @onready var combine_button: Button = %CombineButton
+@onready var reset_selection_button: Button = %ResetSelectionButton
 @onready var card_hand: CardHand = %CardHand
+@onready var objective_panel: PanelContainer = %ObjectivePanel
 @onready var objective_item_texture: TextureRect = %ObjectiveItemTexture
 @onready var objective_target_label: Label = %ObjectiveTargetLabel
+@onready var storage_section: VBoxContainer = %StorageSection
 @onready var inventory_hint_label: Label = %InventoryHintLabel
 @onready var inventory_items_flow: HFlowContainer = %InventoryItemsFlow
+@onready var tutorial_dim_overlay: ColorRect = %TutorialDimOverlay
+@onready var tutorial_spotlight_ring: Panel = %TutorialSpotlightRing
 @onready var settings_popup: Control = %SettingsPopup
 @onready var mute_check_button: CheckButton = %MuteCheckButton
 @onready var volume_slider: HSlider = %VolumeSlider
@@ -126,12 +334,27 @@ const OBJECTIVE_DECK_POOLS: Dictionary = {
 @onready var left_page_text: RichTextLabel = %LeftPageText
 @onready var right_page_text: RichTextLabel = %RightPageText
 @onready var close_book_button: Button = %CloseBookButton
+@onready var level_complete_popup: Control = %LevelCompletePopup
+@onready var reward_card_pivot: Control = %RewardCardPivot
+@onready var reward_card_texture: TextureRect = %RewardCardTexture
+@onready var level_continue_button: Button = %LevelContinueButton
 
 var _processor := CraftingProcessor.new()
+var _stage_number: int = 1
 var _current_objective_index: int = 0
 var _deck_injected_items: Array[StringName] = []
 var _current_hand_ids: Array[StringName] = []
 var _combine_slots: Array[Button] = []
+var _tutorial_phase: TutorialPhase = TutorialPhase.INTRO_DIALOGUE
+var _tutorial_line_index: int = 0
+var _active_highlight_key: String = ""
+var _ilmuan_avatar_tex: AtlasTexture
+var _rail_avatar_tex: AtlasTexture
+var _reward_tween: Tween = null
+var _last_preview_matched_id: StringName = &""
+var _last_tutorial_speaker: String = ""
+var _last_tutorial_text: String = ""
+var _pre_mute_volume: float = 0.8
 
 
 func _ready() -> void:
@@ -139,6 +362,8 @@ func _ready() -> void:
 		card_catalog = DEFAULT_CARDS.duplicate()
 	if recipes.is_empty():
 		recipes = DEFAULT_RECIPES.duplicate()
+
+	_build_avatar_textures()
 
 	_combine_slots = [combine_slot_0, combine_slot_1, combine_slot_2]
 	for i in range(_combine_slots.size()):
@@ -148,23 +373,19 @@ func _ready() -> void:
 		slot_btn.pressed.connect(func() -> void: _on_combine_slot_pressed(slot_idx))
 
 	inventory_manager.register_cards(card_catalog)
-	inventory_manager.setup_initial_inventory(
-		{
-			&"kawat_baja": 3,
-			&"benang": 3,
-			&"besi_batangan": 3,
-		},
-		[&"amplas", &"tenun", &"peleburan"],
-		[&"batu_asah", &"alat_tenun", &"cetakan"]
-	)
 
 	card_hand.max_selected = 3
 	card_hand.selection_changed.connect(_on_hand_selection_changed)
 	card_hand.selection_limit_reached.connect(_on_hand_selection_limit_reached)
 	card_hand.refresh_requested.connect(_on_card_hand_refresh_requested)
 	combine_button.pressed.connect(_on_combine_pressed)
+	reset_selection_button.pressed.connect(_on_reset_selection_pressed)
 	settings_button.pressed.connect(open_settings_popup)
 	book_button.pressed.connect(open_book_popup)
+	tutorial_pill_panel.gui_input.connect(_on_tutorial_advance_gui_input)
+	tutorial_dim_overlay.gui_input.connect(_on_tutorial_advance_gui_input)
+	tutorial_spotlight_ring.gui_input.connect(_on_tutorial_advance_gui_input)
+	resized.connect(_refresh_spotlight_ring_deferred)
 
 	mute_check_button.toggled.connect(_on_mute_toggled)
 	volume_slider.value_changed.connect(_on_volume_changed)
@@ -172,16 +393,23 @@ func _ready() -> void:
 	back_to_dialogue_button.pressed.connect(_on_back_to_dialogue_pressed)
 	close_settings_button.pressed.connect(close_settings_popup)
 	close_book_button.pressed.connect(close_book_popup)
+	level_continue_button.pressed.connect(_on_level_continue_pressed)
 
 	_sync_audio_controls_from_server()
-	_refresh_objective_and_book()
-	_refresh_inventory_panel()
-	_refresh_hand(false)
-	_update_combine_stage([])
+	_configure_stage_inventory_and_state()
+	AudioManager.play_bgm(&"crafting")
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept") and _is_tutorial_click_phase() and not _any_popup_open():
+		advance_tutorial_dialogue()
+		get_viewport().set_input_as_handled()
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
+		if level_complete_popup.visible:
+			return
 		if book_popup.visible:
 			close_book_popup()
 			get_viewport().set_input_as_handled()
@@ -193,10 +421,124 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 
+func setup_stage(stage_number: int) -> void:
+	_stage_number = stage_number
+	_current_objective_index = 0
+	_deck_injected_items.clear()
+	_last_preview_matched_id = &""
+	if not is_node_ready():
+		return
+	_configure_stage_inventory_and_state()
+
+
+func _configure_stage_inventory_and_state() -> void:
+	if _stage_number == 3:
+		inventory_manager.setup_initial_inventory(
+			{
+				&"besi_batangan": 3,
+				&"mawar": 3,
+				&"beeswax": 3,
+			},
+			[&"peleburan", &"menumbuk"],
+			[&"tungku", &"mortar"]
+		)
+		_tutorial_phase = TutorialPhase.COMPLETED
+		_tutorial_line_index = 0
+	elif _stage_number == 2:
+		inventory_manager.setup_initial_inventory(
+			{
+				&"biji_perak": 3,
+				&"pasir_silica": 3,
+			},
+			[&"peleburan", &"menempa", &"menumbuk"],
+			[&"tungku", &"cetakan", &"palu"]
+		)
+		_tutorial_phase = TutorialPhase.COMPLETED
+		_tutorial_line_index = 0
+	else:
+		inventory_manager.setup_initial_inventory(
+			{
+				&"kawat_baja": 3,
+				&"benang": 3,
+				&"besi_batangan": 3,
+			},
+			[&"amplas", &"tenun", &"peleburan"],
+			[&"batu_asah", &"alat_tenun", &"cetakan"]
+		)
+		_tutorial_phase = TutorialPhase.INTRO_DIALOGUE
+		_tutorial_line_index = 0
+
+	_refresh_objective_and_book()
+	_refresh_inventory_panel()
+	_refresh_hand(false)
+	_update_combine_stage([])
+	_apply_tutorial_state()
+
+
+func _get_active_objective_sequence() -> Array[StringName]:
+	if _stage_number == 3:
+		return STAGE3_OBJECTIVE_SEQUENCE
+	if _stage_number == 2:
+		return STAGE2_OBJECTIVE_SEQUENCE
+	return OBJECTIVE_SEQUENCE
+
+
+func _get_active_deck_pools() -> Dictionary:
+	if _stage_number == 3:
+		return STAGE3_DECK_POOLS
+	if _stage_number == 2:
+		return STAGE2_DECK_POOLS
+	return OBJECTIVE_DECK_POOLS
+
+
 func get_current_objective_id() -> StringName:
-	if _current_objective_index < 0 or _current_objective_index >= OBJECTIVE_SEQUENCE.size():
-		return &"baju"
-	return OBJECTIVE_SEQUENCE[_current_objective_index]
+	var seq := _get_active_objective_sequence()
+	if _current_objective_index < 0 or _current_objective_index >= seq.size():
+		return seq[seq.size() - 1]
+	return seq[_current_objective_index]
+
+
+func get_tutorial_phase() -> TutorialPhase:
+	return _tutorial_phase
+
+
+func get_tutorial_line_index() -> int:
+	return _tutorial_line_index
+
+
+func advance_tutorial_dialogue() -> void:
+	match _tutorial_phase:
+		TutorialPhase.INTRO_DIALOGUE:
+			if _tutorial_line_index < INTRO_TUTORIAL_LINES.size() - 1:
+				_tutorial_line_index += 1
+				_apply_tutorial_state()
+			else:
+				_tutorial_phase = TutorialPhase.WAIT_SELECT_CARDS
+				_tutorial_line_index = 0
+				_apply_tutorial_state()
+				if card_hand.get_selected_count() >= 3:
+					_tutorial_phase = TutorialPhase.PREVIEW_EXPLAIN_DIALOGUE
+					_apply_tutorial_state()
+		TutorialPhase.PREVIEW_EXPLAIN_DIALOGUE:
+			_tutorial_phase = TutorialPhase.WAIT_PRESS_COMBINE
+			_apply_tutorial_state()
+		TutorialPhase.AFTER_FIRST_CRAFT_DIALOGUE:
+			if _tutorial_line_index < AFTER_FIRST_CRAFT_LINES.size() - 1:
+				_tutorial_line_index += 1
+				_apply_tutorial_state()
+			else:
+				_tutorial_phase = TutorialPhase.WAIT_ALL_INTERMEDIATES
+				_tutorial_line_index = 0
+				_apply_tutorial_state()
+				_check_all_intermediates_ready()
+		TutorialPhase.READY_FOR_BAJU_DIALOGUE:
+			if _tutorial_line_index < READY_FOR_BAJU_LINES.size() - 1:
+				_tutorial_line_index += 1
+				_apply_tutorial_state()
+			else:
+				_tutorial_phase = TutorialPhase.WAIT_CRAFT_BAJU
+				_tutorial_line_index = 0
+				_apply_tutorial_state()
 
 
 func send_inventory_item_to_deck(card_id: StringName) -> bool:
@@ -207,6 +549,7 @@ func send_inventory_item_to_deck(card_id: StringName) -> bool:
 	var card := inventory_manager.get_card(card_id)
 	var card_name := card.display_name if card != null else String(card_id)
 	stage_feedback_label.text = "'%s' dimasukkan dari penyimpanan ke deck bawah." % card_name
+	AudioManager.play_sfx(&"card_pick", 1.04, 1.10)
 	_refresh_inventory_panel()
 	_refresh_hand(false)
 	return true
@@ -217,6 +560,7 @@ func craft_selected_cards() -> ProcessingResult:
 	var result := _processor.execute(selected, recipes, inventory_manager)
 
 	if result.status == ProcessingResult.Status.VALIDATION_ERROR:
+		AudioManager.play_sfx(&"ui_click", 0.62, 0.68)
 		stage_feedback_label.text = result.reason
 		_apply_preview_visual("!", "Belum Cocok", null, Color("#1E1610"))
 		craft_completed.emit(result)
@@ -228,7 +572,12 @@ func craft_selected_cards() -> ProcessingResult:
 	var out_icon: Texture2D = out_card.icon if out_card != null else null
 
 	# Keep starter raw materials replenished so experimentation never soft-locks the tutorial.
-	for base_id in [&"kawat_baja", &"benang", &"besi_batangan"]:
+	var starter_materials: Array[StringName] = [&"kawat_baja", &"benang", &"besi_batangan"]
+	if _stage_number == 3:
+		starter_materials = [&"besi_batangan", &"mawar", &"beeswax"]
+	elif _stage_number == 2:
+		starter_materials = [&"biji_perak", &"pasir_silica"]
+	for base_id in starter_materials:
 		if inventory_manager.get_material_count(base_id) <= 0:
 			inventory_manager.add_material(base_id, 1)
 
@@ -245,11 +594,62 @@ func craft_selected_cards() -> ProcessingResult:
 
 	_apply_preview_visual("*", out_name, out_icon, Color("#2E7D32"))
 	stage_feedback_label.text = "Berhasil membuat '%s'! Item masuk ke penyimpanan." % out_name
+	if out_id == &"baju" or out_id == &"cermin" or out_id == &"lipstik":
+		AudioManager.play_sfx(&"craft_final")
+		AudioManager.play_sfx(&"fanfare")
+	else:
+		_play_intermediate_craft_sfx(out_id)
+	_handle_tutorial_after_craft(out_id, out_card)
 	craft_completed.emit(result)
 	return result
 
 
+func show_level_complete_popup(card: CardData = null) -> void:
+	book_popup.visible = false
+	settings_popup.visible = false
+	_update_tutorial_overlay_and_spotlight("", false)
+	var fallback_tex: Texture2D = BAJU_CARD_TEX
+	if _stage_number == 3:
+		fallback_tex = LIPSTIK_CARD_TEX
+	elif _stage_number == 2:
+		fallback_tex = CERMIN_CARD_TEX
+	reward_card_texture.texture = card.card_texture if card != null and card.card_texture != null else fallback_tex
+	var subtitle_label := level_complete_popup.get_node_or_null("CenterContainer/LevelModalPanel/MarginContainer/LevelVBox/LevelSubtitleLabel") as Label
+	var quote_label := get_node_or_null("%LevelCompleteQuoteLabel") as Label
+	if _stage_number == 3:
+		if subtitle_label != null:
+			subtitle_label.text = "Lipstik Berhasil Dibuat!"
+		if quote_label != null:
+			quote_label.text = "Tadaa! Lipstiknya sudah jadi! Ayo kita lihat reaksi Rail saat mencobanya."
+	elif _stage_number == 2:
+		if subtitle_label != null:
+			subtitle_label.text = "Cermin Berhasil Dibuat!"
+		if quote_label != null:
+			quote_label.text = "Tadaa! Cermin sudah jadi! Sekarang Rail bisa melihat bayangannya sendiri."
+	else:
+		if subtitle_label != null:
+			subtitle_label.text = "Baju Pertama Berhasil Dibuat!"
+		if quote_label != null:
+			quote_label.text = "Tadaa! Ini dia baju pertama yang berhasil kita buat, uhh aku tak yakin apakah kalian bisa mengenakannya."
+	level_complete_popup.visible = true
+
+	var pivot_size := reward_card_pivot.custom_minimum_size
+	reward_card_pivot.pivot_offset = pivot_size * 0.5
+	reward_card_pivot.scale = Vector2(0.15, 0.15)
+	reward_card_pivot.rotation_degrees = -360.0
+
+	if _reward_tween != null and _reward_tween.is_running():
+		_reward_tween.kill()
+
+	_reward_tween = create_tween()
+	_reward_tween.set_parallel(true)
+	_reward_tween.tween_property(reward_card_pivot, "scale", Vector2.ONE, 0.75).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_reward_tween.tween_property(reward_card_pivot, "rotation_degrees", 0.0, 0.75).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	level_continue_button.grab_focus()
+
+
 func open_settings_popup() -> void:
+	AudioManager.play_sfx(&"ui_click")
 	book_popup.visible = false
 	_sync_audio_controls_from_server()
 	settings_popup.visible = true
@@ -257,11 +657,13 @@ func open_settings_popup() -> void:
 
 
 func close_settings_popup() -> void:
+	AudioManager.play_sfx(&"ui_click")
 	settings_popup.visible = false
 	settings_button.grab_focus()
 
 
 func open_book_popup() -> void:
+	AudioManager.play_sfx(&"ui_click")
 	settings_popup.visible = false
 	_refresh_objective_and_book()
 	book_popup.visible = true
@@ -269,22 +671,295 @@ func open_book_popup() -> void:
 
 
 func close_book_popup() -> void:
+	AudioManager.play_sfx(&"ui_click")
 	book_popup.visible = false
 	book_button.grab_focus()
 
 
+func _build_avatar_textures() -> void:
+	_ilmuan_avatar_tex = AtlasTexture.new()
+	_ilmuan_avatar_tex.atlas = PLAYER_SPRITE_TEX
+	_ilmuan_avatar_tex.region = Rect2(520, 50, 1060, 1060)
+
+	_rail_avatar_tex = AtlasTexture.new()
+	_rail_avatar_tex.atlas = RAIL_SPRITE_TEX
+	_rail_avatar_tex.region = Rect2(420, 140, 1100, 1100)
+
+
+func _any_popup_open() -> bool:
+	return settings_popup.visible or book_popup.visible or level_complete_popup.visible
+
+
+func _is_tutorial_click_phase() -> bool:
+	return (
+		_tutorial_phase == TutorialPhase.INTRO_DIALOGUE
+		or _tutorial_phase == TutorialPhase.PREVIEW_EXPLAIN_DIALOGUE
+		or _tutorial_phase == TutorialPhase.AFTER_FIRST_CRAFT_DIALOGUE
+		or _tutorial_phase == TutorialPhase.READY_FOR_BAJU_DIALOGUE
+	)
+
+
+func _set_tutorial_bar(speaker: String, text: String, prompt: String) -> void:
+	var is_rail := speaker == "rail"
+	tutorial_avatar_texture.texture = _rail_avatar_tex if is_rail else _ilmuan_avatar_tex
+	# Flip Ilmuan horizontally so he faces right toward the speech pill.
+	tutorial_avatar_texture.flip_h = not is_rail
+	tutorial_text_label.text = text
+	tutorial_prompt_label.text = prompt
+	tutorial_prompt_label.visible = not prompt.is_empty()
+
+	var is_dialogue_step := _is_tutorial_click_phase() or _tutorial_phase == TutorialPhase.COMPLETED
+	if is_dialogue_step and (speaker != _last_tutorial_speaker or text != _last_tutorial_text):
+		AudioManager.play_voice_burst(speaker, 5)
+	_last_tutorial_speaker = speaker
+	_last_tutorial_text = text
+
+
+func _play_intermediate_craft_sfx(out_id: StringName) -> void:
+	match out_id:
+		&"alat_jahit", &"perak_batangan", &"cetakan_lipstik":
+			AudioManager.play_sfx(&"craft_step_1")
+		&"kain", &"kaca", &"pewarna":
+			AudioManager.play_sfx(&"craft_step_2")
+		&"gunting", &"lilin":
+			AudioManager.play_sfx(&"craft_step_3")
+		_:
+			AudioManager.play_sfx(&"craft_step_1")
+
+
+func _get_highlight_target(key: String) -> Control:
+	match key:
+		"slots":
+			return combine_slots_row
+		"objective":
+			return objective_panel
+		"book":
+			return book_button
+		"storage":
+			return storage_section
+		"hand":
+			return card_hand
+		"preview":
+			return you_get_frame
+	return null
+
+
+func _update_tutorial_overlay_and_spotlight(highlight_key: String, overlay_active: bool) -> void:
+	_active_highlight_key = highlight_key if overlay_active else ""
+	for target in [combine_slots_row, objective_panel, book_button, storage_section, card_hand, you_get_frame]:
+		if target != null:
+			target.z_index = 0
+
+	tutorial_dim_overlay.visible = overlay_active
+	if not overlay_active:
+		tutorial_spotlight_ring.visible = false
+		return
+
+	var focus_target := _get_highlight_target(highlight_key)
+	if focus_target == null:
+		tutorial_spotlight_ring.visible = false
+		return
+
+	focus_target.z_index = 55
+	_position_spotlight_ring(focus_target)
+	call_deferred("_refresh_spotlight_ring_deferred")
+
+
+func _position_spotlight_ring(target: Control) -> void:
+	if target == null or not tutorial_dim_overlay.visible:
+		tutorial_spotlight_ring.visible = false
+		return
+	var rect := target.get_global_rect().grow(6.0)
+	tutorial_spotlight_ring.global_position = rect.position
+	tutorial_spotlight_ring.size = rect.size
+	tutorial_spotlight_ring.visible = true
+
+
+func _refresh_spotlight_ring_deferred() -> void:
+	if _active_highlight_key.is_empty() or not tutorial_dim_overlay.visible:
+		return
+	_position_spotlight_ring(_get_highlight_target(_active_highlight_key))
+
+
+func _apply_tutorial_state() -> void:
+	if _stage_number == 3:
+		_update_tutorial_overlay_and_spotlight("", false)
+		if inventory_manager.has_material(&"lipstik", 1):
+			_set_tutorial_bar(
+				"ilmuan",
+				"Tadaa! Lipstiknya sudah jadi! Ayo kita lihat reaksi Rail saat mencobanya.",
+				""
+			)
+		else:
+			_set_tutorial_bar(
+				"ilmuan",
+				"Perhatikan kotak Objektif dan buka Buku Panduan di atas untuk melihat resep pembuatan Lipstik.",
+				""
+			)
+		return
+
+	if _stage_number == 2:
+		_update_tutorial_overlay_and_spotlight("", false)
+		if inventory_manager.has_material(&"cermin", 1):
+			_set_tutorial_bar(
+				"ilmuan",
+				"Tadaa! Cermin sudah jadi! Sekarang Rail bisa melihat bayangannya sendiri.",
+				""
+			)
+		else:
+			_set_tutorial_bar(
+				"ilmuan",
+				"Perhatikan kotak Objektif dan buka Buku Panduan di atas untuk melihat resep pembuatan Cermin.",
+				""
+			)
+		return
+
+	match _tutorial_phase:
+		TutorialPhase.INTRO_DIALOGUE:
+			var entry: Dictionary = INTRO_TUTORIAL_LINES[_tutorial_line_index]
+			var is_last := _tutorial_line_index >= INTRO_TUTORIAL_LINES.size() - 1
+			var prompt := "[Klik / Spasi]" if not is_last else "[Klik / Spasi untuk Mulai]"
+			_set_tutorial_bar(String(entry["speaker"]), String(entry["text"]), prompt)
+			_update_tutorial_overlay_and_spotlight(String(entry.get("highlight", "")), true)
+		TutorialPhase.WAIT_SELECT_CARDS:
+			var last_intro: Dictionary = INTRO_TUTORIAL_LINES[INTRO_TUTORIAL_LINES.size() - 1]
+			_set_tutorial_bar(String(last_intro["speaker"]), String(last_intro["text"]), "[Pilih 3 Kartu]")
+			_update_tutorial_overlay_and_spotlight("", false)
+		TutorialPhase.PREVIEW_EXPLAIN_DIALOGUE:
+			_set_tutorial_bar(
+				String(PREVIEW_EXPLAIN_LINE["speaker"]),
+				String(PREVIEW_EXPLAIN_LINE["text"]),
+				"[Klik / Spasi untuk Tekan Gabungkan]"
+			)
+			_update_tutorial_overlay_and_spotlight(String(PREVIEW_EXPLAIN_LINE["highlight"]), true)
+		TutorialPhase.WAIT_PRESS_COMBINE:
+			_set_tutorial_bar(
+				String(PREVIEW_EXPLAIN_LINE["speaker"]),
+				String(PREVIEW_EXPLAIN_LINE["text"]),
+				"[Tekan gabungkan]"
+			)
+			_update_tutorial_overlay_and_spotlight("", false)
+		TutorialPhase.AFTER_FIRST_CRAFT_DIALOGUE:
+			var entry: Dictionary = AFTER_FIRST_CRAFT_LINES[_tutorial_line_index]
+			var is_last := _tutorial_line_index >= AFTER_FIRST_CRAFT_LINES.size() - 1
+			var prompt := "[Klik / Spasi]" if not is_last else "[Klik / Spasi untuk Lanjut]"
+			_set_tutorial_bar(String(entry["speaker"]), String(entry["text"]), prompt)
+			_update_tutorial_overlay_and_spotlight(String(entry.get("highlight", "")), true)
+		TutorialPhase.WAIT_ALL_INTERMEDIATES:
+			_set_tutorial_bar(
+				"ilmuan",
+				"Sekarang coba buat lagi benda lain yang kita butuhkan. Lihat apa yang harus kau buat lagi pada kotak objektif.",
+				"[Buat Kain & Gunting]"
+			)
+			_update_tutorial_overlay_and_spotlight("", false)
+		TutorialPhase.READY_FOR_BAJU_DIALOGUE:
+			var entry: Dictionary = READY_FOR_BAJU_LINES[_tutorial_line_index]
+			var is_last := _tutorial_line_index >= READY_FOR_BAJU_LINES.size() - 1
+			var prompt := "[Klik / Spasi]" if not is_last else "[Klik / Spasi untuk Lanjut]"
+			_set_tutorial_bar(String(entry["speaker"]), String(entry["text"]), prompt)
+			_update_tutorial_overlay_and_spotlight(String(entry.get("highlight", "")), true)
+		TutorialPhase.WAIT_CRAFT_BAJU:
+			var last_ready: Dictionary = READY_FOR_BAJU_LINES[READY_FOR_BAJU_LINES.size() - 1]
+			_set_tutorial_bar(String(last_ready["speaker"]), String(last_ready["text"]), "[Gabungkan 3 Bahan]")
+			_update_tutorial_overlay_and_spotlight("", false)
+		TutorialPhase.COMPLETED:
+			_set_tutorial_bar(
+				"ilmuan",
+				"Tadaa! Ini dia baju pertama yang berhasil kita buat, uhh aku tak yakin apakah kalian bisa mengenakannya.",
+				""
+			)
+			_update_tutorial_overlay_and_spotlight("", false)
+
+
+func _handle_tutorial_after_craft(out_id: StringName, out_card: CardData) -> void:
+	if _stage_number == 3:
+		if out_id == &"lipstik":
+			_set_tutorial_bar(
+				"ilmuan",
+				"Tadaa! Lipstiknya sudah jadi! Ayo kita lihat reaksi Rail saat mencobanya.",
+				""
+			)
+			show_level_complete_popup(out_card)
+		elif (
+			inventory_manager.has_material(&"cetakan_lipstik", 1)
+			and inventory_manager.has_material(&"pewarna", 1)
+			and inventory_manager.has_material(&"lilin", 1)
+		):
+			_set_tutorial_bar(
+				"ilmuan",
+				"Cetakan, Pewarna, dan Lilin sudah siap! Ambil ketiganya dari Penyimpanan lalu gabungkan menjadi Lipstik.",
+				""
+			)
+		return
+
+	if _stage_number == 2:
+		if out_id == &"cermin":
+			_set_tutorial_bar(
+				"ilmuan",
+				"Tadaa! Cermin sudah jadi! Sekarang Rail bisa melihat bayangannya sendiri.",
+				""
+			)
+			show_level_complete_popup(out_card)
+		elif inventory_manager.has_material(&"perak_batangan", 1) and inventory_manager.has_material(&"kaca", 1):
+			_set_tutorial_bar(
+				"ilmuan",
+				"Perak Batangan dan Kaca sudah siap! Ambil keduanya dari Penyimpanan lalu gabungkan dengan Cetakan.",
+				""
+			)
+		return
+
+	if out_id == &"baju":
+		_tutorial_phase = TutorialPhase.COMPLETED
+		_tutorial_line_index = 0
+		_apply_tutorial_state()
+		show_level_complete_popup(out_card)
+		return
+
+	if _has_all_baju_ingredients():
+		_tutorial_phase = TutorialPhase.READY_FOR_BAJU_DIALOGUE
+		_tutorial_line_index = 0
+		_apply_tutorial_state()
+		return
+
+	if _tutorial_phase in [
+		TutorialPhase.INTRO_DIALOGUE,
+		TutorialPhase.WAIT_SELECT_CARDS,
+		TutorialPhase.PREVIEW_EXPLAIN_DIALOGUE,
+		TutorialPhase.WAIT_PRESS_COMBINE,
+	]:
+		_tutorial_phase = TutorialPhase.AFTER_FIRST_CRAFT_DIALOGUE
+		_tutorial_line_index = 0
+		_apply_tutorial_state()
+
+
+func _has_all_baju_ingredients() -> bool:
+	return (
+		inventory_manager.has_material(&"alat_jahit", 1)
+		and inventory_manager.has_material(&"kain", 1)
+		and inventory_manager.has_material(&"gunting", 1)
+	)
+
+
+func _check_all_intermediates_ready() -> void:
+	if _has_all_baju_ingredients() and _tutorial_phase == TutorialPhase.WAIT_ALL_INTERMEDIATES:
+		_tutorial_phase = TutorialPhase.READY_FOR_BAJU_DIALOGUE
+		_tutorial_line_index = 0
+		_apply_tutorial_state()
+
+
 func _advance_objective_if_matched(crafted_output_id: StringName) -> void:
+	var seq := _get_active_objective_sequence()
 	if crafted_output_id == get_current_objective_id():
-		if _current_objective_index < OBJECTIVE_SEQUENCE.size() - 1:
+		if _current_objective_index < seq.size() - 1:
 			_current_objective_index += 1
 		return
 
-	for i in range(OBJECTIVE_SEQUENCE.size()):
-		var obj_id := OBJECTIVE_SEQUENCE[i]
+	for i in range(seq.size()):
+		var obj_id := seq[i]
 		if not inventory_manager.has_material(obj_id, 1):
 			_current_objective_index = i
 			return
-	_current_objective_index = OBJECTIVE_SEQUENCE.size() - 1
+	_current_objective_index = seq.size() - 1
 
 
 func _collect_available_pool_ids() -> Array[StringName]:
@@ -335,7 +1010,13 @@ func _build_balanced_deck_ids(shuffle_pool: bool) -> Array[StringName]:
 		return candidate_hand
 
 	var current_obj := get_current_objective_id()
-	var base_pool: Array = OBJECTIVE_DECK_POOLS.get(current_obj, OBJECTIVE_DECK_POOLS[&"alat_jahit"])
+	var pools := _get_active_deck_pools()
+	var default_pool_key: StringName = &"alat_jahit"
+	if _stage_number == 3:
+		default_pool_key = &"cetakan_lipstik"
+	elif _stage_number == 2:
+		default_pool_key = &"perak_batangan"
+	var base_pool: Array = pools.get(current_obj, pools[default_pool_key])
 	for raw_id in base_pool:
 		if deck_ids.size() >= CardHand.HAND_CAPACITY:
 			break
@@ -358,7 +1039,11 @@ func _refresh_objective_and_book() -> void:
 	var obj_card := inventory_manager.get_card(current_obj)
 	var obj_name := obj_card.display_name if obj_card != null else String(current_obj)
 
-	if inventory_manager.has_material(&"baju", 1):
+	if _stage_number == 3 and inventory_manager.has_material(&"lipstik", 1):
+		objective_target_label.text = "Lipstik (Selesai!)"
+	elif _stage_number == 2 and inventory_manager.has_material(&"cermin", 1):
+		objective_target_label.text = "Cermin (Selesai!)"
+	elif _stage_number == 1 and inventory_manager.has_material(&"baju", 1):
 		objective_target_label.text = "Baju (Selesai!)"
 	else:
 		objective_target_label.text = obj_name
@@ -386,14 +1071,61 @@ func _refresh_objective_and_book() -> void:
 		objective_target_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		objective_target_label.add_theme_font_size_override("font_size", 28)
 
+	if _stage_number == 3:
+		left_page_text.text = (
+			"Bahan Setengah Jadi:\n\n"
+			+ "1. Cetakan\n"
+			+ "   Besi Batangan + Melebur + Tungku\n\n"
+			+ "2. Pewarna\n"
+			+ "   Mawar + Menumbuk + Mortar\n\n"
+			+ "3. Lilin\n"
+			+ "   Beeswax + Melebur + Tungku"
+		)
+
+		var has_ct := "v" if inventory_manager.has_material(&"cetakan_lipstik", 1) else " "
+		var has_pw := "v" if inventory_manager.has_material(&"pewarna", 1) else " "
+		var has_ll := "v" if inventory_manager.has_material(&"lilin", 1) else " "
+		right_page_text.text = (
+			"Aturan Bahan Jadi:\n\n"
+			+ "LIPSTIK =\n"
+			+ "[%s] Cetakan\n"
+			+ "[%s] Pewarna\n"
+			+ "[%s] Lilin\n\n"
+			+ "Alur:\n"
+			+ "Hasil gabungkan masuk ke Penyimpanan. Klik kartu mini di Penyimpanan agar masuk ke Deck Bawah."
+		) % [has_ct, has_pw, has_ll]
+		return
+
+	if _stage_number == 2:
+		left_page_text.text = (
+			"Bahan Setengah Jadi:\n\n"
+			+ "1. Perak Batangan\n"
+			+ "   Biji Perak + Melebur + Tungku\n\n"
+			+ "2. Kaca\n"
+			+ "   Pasir Silica + Melebur + Tungku"
+		)
+
+		var has_pb := "v" if inventory_manager.has_material(&"perak_batangan", 1) else " "
+		var has_kc := "v" if inventory_manager.has_material(&"kaca", 1) else " "
+		right_page_text.text = (
+			"Aturan Bahan Jadi:\n\n"
+			+ "CERMIN =\n"
+			+ "[%s] Perak Batangan\n"
+			+ "[%s] Kaca\n"
+			+ "[v] Cetakan (Alat)\n\n"
+			+ "Alur:\n"
+			+ "Hasil gabungkan masuk ke Penyimpanan. Klik kartu mini di Penyimpanan agar masuk ke Deck Bawah."
+		) % [has_pb, has_kc]
+		return
+
 	left_page_text.text = (
 		"Bahan Setengah Jadi:\n\n"
 		+ "1. Alat Jahit\n"
-		+ "   Kawat Baja + Amplas + Batu Asah\n\n"
+		+ "   Kawat Baja + Mengasah + Alat Amplas\n\n"
 		+ "2. Kain\n"
-		+ "   Benang + Tenun + Alat Tenun\n\n"
+		+ "   Benang + Menenun + Alat Tenun\n\n"
 		+ "3. Gunting\n"
-		+ "   Besi Batangan + Peleburan + Cetakan"
+		+ "   Besi Batangan + Melebur + Cetakan"
 	)
 
 	var has_aj := "v" if inventory_manager.has_material(&"alat_jahit", 1) else " "
@@ -407,7 +1139,7 @@ func _refresh_objective_and_book() -> void:
 		+ "[%s] Kain\n"
 		+ "[%s] Gunting\n\n"
 		+ "Alur:\n"
-		+ "Hasil combine masuk ke Penyimpanan. Klik kartu mini di Penyimpanan agar masuk ke Deck Bawah."
+		+ "Hasil gabungkan masuk ke Penyimpanan. Klik kartu mini di Penyimpanan agar masuk ke Deck Bawah."
 	) % [has_aj, has_kn, has_gt]
 
 
@@ -441,7 +1173,7 @@ func _create_storage_mini_card_button(
 	in_deck: bool
 ) -> Button:
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(90, 126)
+	btn.custom_minimum_size = Vector2(96, 136)
 	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn.tooltip_text = "%s (x%d) - Klik untuk memasukkan ke deck bawah" % [item_name, count]
 
@@ -500,43 +1232,46 @@ func _create_storage_mini_card_button(
 func _update_combine_stage(selected_cards: Array[CardData]) -> void:
 	for i in range(_combine_slots.size()):
 		var slot_btn := _combine_slots[i]
-		var empty_tpl := slot_btn.get_node_or_null("EmptyTemplate") as TextureRect
 		var slot_card_view := slot_btn.get_node_or_null("SlotCardView") as CardUI
 
 		if i < selected_cards.size() and selected_cards[i] != null:
 			var card := selected_cards[i]
 			slot_btn.disabled = false
 			slot_btn.tooltip_text = "%s - Klik untuk melepas kartu" % card.display_name
-			if empty_tpl != null:
-				empty_tpl.visible = false
 			if slot_card_view != null:
 				slot_card_view.visible = true
 				slot_card_view.set_static_display(card, -1)
 		else:
 			slot_btn.disabled = true
 			slot_btn.tooltip_text = "Slot %d kosong" % (i + 1)
-			if empty_tpl != null:
-				empty_tpl.visible = true
 			if slot_card_view != null:
 				slot_card_view.visible = false
 
 	combine_button.disabled = selected_cards.is_empty()
+	reset_selection_button.disabled = selected_cards.is_empty()
 
 	if selected_cards.is_empty():
+		_last_preview_matched_id = &""
 		_apply_preview_visual("?", "Pilih Kartu", null, Color("#1E1610"))
 		return
 
 	var preview_result := _processor.validate_selection(selected_cards, recipes, inventory_manager)
 	if preview_result.status == ProcessingResult.Status.SUCCESS and not preview_result.output_ids.is_empty():
-		var out_card := inventory_manager.get_card(preview_result.output_ids[0])
-		var out_name := out_card.display_name if out_card != null else String(preview_result.output_ids[0])
+		var matched_id := preview_result.output_ids[0]
+		var out_card := inventory_manager.get_card(matched_id)
+		var out_name := out_card.display_name if out_card != null else String(matched_id)
 		var out_icon: Texture2D = out_card.icon if out_card != null else null
 		_apply_preview_visual("*", out_name, out_icon, Color("#1E1610"))
-		stage_feedback_label.text = "Kombinasi cocok! Tekan 'combine' untuk membuat '%s'." % out_name
+		stage_feedback_label.text = "Kombinasi cocok! Tekan 'gabungkan' untuk membuat '%s'." % out_name
+		if matched_id != _last_preview_matched_id:
+			_last_preview_matched_id = matched_id
+			AudioManager.play_sfx(&"preview_match")
 	elif selected_cards.size() < 3:
+		_last_preview_matched_id = &""
 		_apply_preview_visual("...", "%d / 3 Kartu" % selected_cards.size(), null, Color("#1E1610"))
 		stage_feedback_label.text = "Pilih %d kartu lagi dari deck bawah." % (3 - selected_cards.size())
 	else:
+		_last_preview_matched_id = &""
 		_apply_preview_visual("?", "Belum Sesuai", null, Color("#1E1610"))
 		stage_feedback_label.text = "3 kartu di tengah belum cocok dengan resep. Klik kartu tengah untuk mengganti."
 
@@ -577,23 +1312,51 @@ func _get_target_audio_bus_index() -> int:
 func _sync_audio_controls_from_server() -> void:
 	var bus_idx := _get_target_audio_bus_index()
 	var is_muted := AudioServer.is_bus_mute(bus_idx)
-	var linear := clampf(db_to_linear(AudioServer.get_bus_volume_db(bus_idx)), 0.0, 1.0)
-	mute_check_button.set_pressed_no_signal(is_muted)
+	var linear := GameSettings.music_volume
+	if linear > 0.001:
+		_pre_mute_volume = linear
+	mute_check_button.set_pressed_no_signal(is_muted or linear <= 0.001)
 	volume_slider.set_value_no_signal(linear)
 	volume_value_label.text = "%d%%" % roundi(linear * 100.0)
 
 
 func _on_mute_toggled(toggled_on: bool) -> void:
-	AudioServer.set_bus_mute(_get_target_audio_bus_index(), toggled_on)
+	AudioManager.play_sfx(&"ui_click")
+	if toggled_on:
+		if volume_slider.value > 0.001:
+			_pre_mute_volume = volume_slider.value
+		GameSettings.set_music_volume(0.0)
+		volume_slider.set_value_no_signal(0.0)
+		volume_value_label.text = "0%"
+	else:
+		var restore := volume_slider.value if volume_slider.value > 0.001 else _pre_mute_volume
+		GameSettings.set_music_volume(restore)
+		volume_slider.set_value_no_signal(restore)
+		volume_value_label.text = "%d%%" % roundi(restore * 100.0)
+	GameSettings.save_settings()
 
 
 func _on_volume_changed(value: float) -> void:
 	var clamped := clampf(value, 0.0, 1.0)
-	var bus_idx := _get_target_audio_bus_index()
-	AudioServer.set_bus_volume_db(bus_idx, linear_to_db(maxf(clamped, 0.0001)))
-	AudioServer.set_bus_mute(bus_idx, clamped <= 0.001)
-	mute_check_button.set_pressed_no_signal(AudioServer.is_bus_mute(bus_idx))
+	if clamped > 0.001:
+		_pre_mute_volume = clamped
+	GameSettings.set_music_volume(clamped)
+	GameSettings.save_settings()
+	mute_check_button.set_pressed_no_signal(clamped <= 0.001)
 	volume_value_label.text = "%d%%" % roundi(clamped * 100.0)
+
+
+func _on_tutorial_advance_gui_input(event: InputEvent) -> void:
+	if not _is_tutorial_click_phase():
+		return
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb != null and mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed:
+			advance_tutorial_dialogue()
+			get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("ui_accept"):
+		advance_tutorial_dialogue()
+		get_viewport().set_input_as_handled()
 
 
 func _on_card_hand_refresh_requested() -> void:
@@ -603,13 +1366,18 @@ func _on_card_hand_refresh_requested() -> void:
 
 func _on_hand_selection_changed(selected_cards: Array[CardData], _max_selected: int) -> void:
 	_update_combine_stage(selected_cards)
+	if selected_cards.size() >= 3 and _tutorial_phase == TutorialPhase.WAIT_SELECT_CARDS:
+		_tutorial_phase = TutorialPhase.PREVIEW_EXPLAIN_DIALOGUE
+		_tutorial_line_index = 0
+		_apply_tutorial_state()
 
 
 func _on_hand_selection_limit_reached(max_sel: int) -> void:
-	stage_feedback_label.text = "Area combine tengah maksimal menampung %d kartu. Klik kartu tengah untuk melepas." % max_sel
+	stage_feedback_label.text = "Area gabungkan tengah maksimal menampung %d kartu. Klik kartu tengah atau tekan reset." % max_sel
 
 
 func _on_combine_slot_pressed(slot_index: int) -> void:
+	AudioManager.play_sfx(&"card_pick", 0.86, 0.92)
 	card_hand.deselect_card_by_index(slot_index)
 
 
@@ -617,9 +1385,22 @@ func _on_combine_pressed() -> void:
 	craft_selected_cards()
 
 
+func _on_reset_selection_pressed() -> void:
+	AudioManager.play_sfx(&"ui_click")
+	card_hand.clear_selection()
+	stage_feedback_label.text = "Pilihan kartu di area tengah direset."
+
+
 func _on_settings_book_pressed() -> void:
 	open_book_popup()
 
 
 func _on_back_to_dialogue_pressed() -> void:
+	AudioManager.play_sfx(&"ui_click")
+	dialogue_requested.emit()
+
+
+func _on_level_continue_pressed() -> void:
+	AudioManager.play_sfx(&"ui_click")
+	level_complete_popup.visible = false
 	dialogue_requested.emit()

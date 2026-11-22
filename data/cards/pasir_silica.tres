@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://bjpf0j7ar6y4e"]
 
-[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Script" uid="uid://da1fxfh4lpkb1" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" uid="uid://crhiigmk870rq" path="res://assets/card/pasir silica.png" id="2_card_tex"]
+[ext_resource type="Texture2D" uid="uid://cvoavtq7i5a28" path="res://assets/items/pasir silica.png" id="3_icon"]
 
 [resource]
 script = ExtResource("1_card")
 card_id = &"pasir_silica"
 display_name = "Pasir Silica"
-category = 0
 description = "Pasir silika murni yang dapat dilebur menjadi lembaran kaca bening."
-consumable = true
+card_texture = ExtResource("2_card_tex")
+icon = ExtResource("3_icon")

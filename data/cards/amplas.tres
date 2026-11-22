@@ -1,11 +1,15 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://dnlemqcp7ctwm"]
 
-[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Script" uid="uid://da1fxfh4lpkb1" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" uid="uid://c2x33gr00ntc2" path="res://assets/card/mengasah.png" id="2_card_tex"]
+[ext_resource type="Texture2D" uid="uid://e07iua3m1wrl" path="res://assets/items/1 mengasah.png" id="3_icon"]
 
 [resource]
 script = ExtResource("1_card")
 card_id = &"amplas"
-display_name = "Amplas"
+display_name = "Mengasah"
 category = 1
 description = "Proses mengikis dan meruncingkan permukaan logam dengan gesekan terarah."
+card_texture = ExtResource("2_card_tex")
+icon = ExtResource("3_icon")
 consumable = false

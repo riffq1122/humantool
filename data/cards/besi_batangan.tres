@@ -1,15 +1,13 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://db1l7v1vxqigp"]
 
-[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
-[ext_resource type="Texture2D" path="res://assets/card/Besi batangan.png" id="2_card_tex"]
-[ext_resource type="Texture2D" path="res://assets/items/batangan besi.png" id="3_icon"]
+[ext_resource type="Script" uid="uid://da1fxfh4lpkb1" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" uid="uid://desgaa4pdq0df" path="res://assets/card/Besi batangan.png" id="2_card_tex"]
+[ext_resource type="Texture2D" uid="uid://rjg7mn1wxuli" path="res://assets/items/batangan besi.png" id="3_icon"]
 
 [resource]
 script = ExtResource("1_card")
 card_id = &"besi_batangan"
 display_name = "Besi Batangan"
-category = 0
 description = "Batangan besi padat yang dapat dilebur kembali ke dalam cetakan."
 card_texture = ExtResource("2_card_tex")
 icon = ExtResource("3_icon")
-consumable = true

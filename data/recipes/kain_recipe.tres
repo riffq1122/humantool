@@ -1,14 +1,12 @@
-[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bjkou10icf75"]
 
-[ext_resource type="Script" path="res://scripts/systems/recipe_data.gd" id="1_recipe"]
+[ext_resource type="Script" uid="uid://baa3n183fuwdl" path="res://scripts/systems/recipe_data.gd" id="1_recipe"]
+[ext_resource type="Script" uid="uid://dt0opwg4npnbj" path="res://scripts/systems/failure_outcome_data.gd" id="1_witf4"]
 
 [resource]
 script = ExtResource("1_recipe")
 recipe_id = &"kain"
 recipe_name = "Buat Kain"
 required_cards = Array[StringName]([&"benang", &"tenun", &"alat_tenun"])
-allow_extra_cards = false
-consume_process = false
-consume_tools = Array[StringName]([])
 outputs = Array[StringName]([&"kain"])
-stem_explanation = "Alat Tenun menyilangkan jalinan Benang melalui proses Tenun hingga membentuk lembaran Kain yang kuat."
+stem_explanation = "Alat Tenun menyilangkan jalinan Benang melalui proses Menenun hingga membentuk lembaran Kain yang kuat."

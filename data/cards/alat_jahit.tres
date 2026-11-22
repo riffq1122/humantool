@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://dm6ss32l0yhw4"]
 
-[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Script" uid="uid://da1fxfh4lpkb1" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" uid="uid://bldjrfmt8wklw" path="res://assets/items/jarum n benang.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_card")
 card_id = &"alat_jahit"
 display_name = "Alat Jahit"
-category = 0
 description = "Bahan setengah jadi berupa jarum baja tajam untuk menyatukan potongan kain."
-consumable = true
+icon = ExtResource("2_icon")

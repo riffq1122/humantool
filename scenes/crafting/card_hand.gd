@@ -7,9 +7,9 @@ signal refresh_requested
 
 const HAND_CAPACITY := 7
 const DEFAULT_MAX_SELECTED := 3
-const CARD_WIDTH := 114.0
-const CARD_HEIGHT := 160.0
-const MAX_CARD_STEP := 108.0
+const CARD_WIDTH := 122.0
+const CARD_HEIGHT := 172.0
+const MAX_CARD_STEP := 110.0
 const HOVER_NEIGHBOR_PUSH := 10.0
 const CARD_UI_SCENE := preload("res://scenes/crafting/card_ui.tscn")
 const PREVIEW_CARDS: Array[CardData] = [
@@ -63,6 +63,8 @@ func set_hand_cards(cards: Array[CardData], material_stocks: Dictionary = {}) ->
 	_layout_cards(true)
 	call_deferred("_layout_cards", true)
 	selection_changed.emit(get_selected_cards(), max_selected)
+	if is_node_ready() and count > 0:
+		AudioManager.play_sfx(&"card_fan")
 
 
 func deselect_card_by_index(selection_index: int) -> void:
@@ -187,13 +189,16 @@ func _on_card_clicked(card_ui: CardUI) -> void:
 	if _selected_nodes.has(card_ui):
 		_selected_nodes.erase(card_ui)
 		card_ui.set_selected(false)
+		AudioManager.play_sfx(&"card_pick", 0.86, 0.92)
 		selection_changed.emit(get_selected_cards(), max_selected)
 		return
 
 	if _selected_nodes.size() >= max_selected:
+		AudioManager.play_sfx(&"ui_click", 0.65, 0.70)
 		selection_limit_reached.emit(max_selected)
 		return
 
 	_selected_nodes.append(card_ui)
 	card_ui.set_selected(true)
+	AudioManager.play_sfx(&"card_pick", 1.0, 1.06)
 	selection_changed.emit(get_selected_cards(), max_selected)

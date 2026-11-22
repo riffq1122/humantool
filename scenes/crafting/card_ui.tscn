@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scenes/crafting/card_ui.gd" id="1_card_ui"]
 [ext_resource type="FontFile" path="res://assets/fonts/Gochi_Hand/GochiHand-Regular.ttf" id="2_gochi"]
+[ext_resource type="FontFile" path="res://assets/fonts/Love_Ya_Like_A_Sister/LoveYaLikeASister-Regular.ttf" id="3_love"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shadow"]
 bg_color = Color(0, 0, 0, 0.42)
@@ -10,21 +11,61 @@ corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_frame"]
+bg_color = Color(0.604, 0.306, 0.141, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.071, 0.051, 0.035, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stock_pill"]
-bg_color = Color(0.169, 0.094, 0.039, 0.92)
+bg_color = Color(0.137, 0.071, 0.027, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.95, 0.88, 0.72, 0.85)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+content_margin_left = 5
+content_margin_top = 1
+content_margin_right = 5
+content_margin_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_art_window"]
+bg_color = Color(0.98, 0.949, 0.878, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.122, 0.078, 0.047, 0.85)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name_plate"]
+bg_color = Color(0.141, 0.078, 0.039, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.88, 0.72, 0.45)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-content_margin_left = 6
-content_margin_top = 1
-content_margin_right = 6
-content_margin_bottom = 1
+content_margin_left = 4
+content_margin_top = 3
+content_margin_right = 4
+content_margin_bottom = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_selection"]
 draw_center = false
@@ -39,14 +80,14 @@ corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_disabled_scrim"]
-bg_color = Color(0.08, 0.06, 0.05, 0.6)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+bg_color = Color(0.08, 0.06, 0.05, 0.62)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
 
 [node name="CardUI" type="Control"]
-custom_minimum_size = Vector2(114, 160)
+custom_minimum_size = Vector2(122, 172)
 layout_mode = 3
 anchors_preset = 0
 focus_mode = 2
@@ -77,7 +118,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_shadow")
 
-[node name="CardArtTexture" type="TextureRect" parent="VisualCard"]
+[node name="CardOuterFrame" type="PanelContainer" parent="VisualCard"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -86,73 +127,93 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_frame")
 
-[node name="DynamicOverlay" type="MarginContainer" parent="VisualCard"]
+[node name="ContentMargin" type="MarginContainer" parent="VisualCard/CardOuterFrame"]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 18
-
-[node name="OverlayVBox" type="VBoxContainer" parent="VisualCard/DynamicOverlay"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 4
-alignment = 1
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
-[node name="IconTexture" type="TextureRect" parent="VisualCard/DynamicOverlay/OverlayVBox"]
+[node name="CardVBox" type="VBoxContainer" parent="VisualCard/CardOuterFrame/ContentMargin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="TopHeaderRow" type="HBoxContainer" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="StockPill" type="PanelContainer" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox/TopHeaderRow"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
-size_flags_horizontal = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="NameLabel" type="Label" parent="VisualCard/DynamicOverlay/OverlayVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_gochi")
-theme_override_font_sizes/font_size = 17
-text = "Kawat Baja"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="StockPill" type="PanelContainer" parent="VisualCard"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -38.0
-offset_top = 7.0
-offset_right = -7.0
-offset_bottom = 29.0
-grow_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_stock_pill")
 
-[node name="StockBadge" type="Label" parent="VisualCard/StockPill"]
+[node name="StockBadge" type="Label" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox/TopHeaderRow/StockPill"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
 theme_override_fonts/font = ExtResource("2_gochi")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "x3"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CategoryTagLabel" type="Label" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox/TopHeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0.973, 0.933, 1)
+theme_override_fonts/font = ExtResource("3_love")
+theme_override_font_sizes/font_size = 11
+text = "MATERIAL"
+vertical_alignment = 1
+
+[node name="ArtFrame" type="PanelContainer" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_art_window")
+
+[node name="ArtMargin" type="MarginContainer" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox/ArtFrame"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="IconTexture" type="TextureRect" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox/ArtFrame/ArtMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NamePlate" type="PanelContainer" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_name_plate")
+
+[node name="NameLabel" type="Label" parent="VisualCard/CardOuterFrame/ContentMargin/CardVBox/NamePlate"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.992, 0.969, 1)
+theme_override_fonts/font = ExtResource("2_gochi")
+theme_override_font_sizes/font_size = 16
+text = "Kawat Baja"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="SelectionHighlight" type="Panel" parent="VisualCard"]
 unique_name_in_owner = true

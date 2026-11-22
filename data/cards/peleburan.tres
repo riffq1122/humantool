@@ -1,11 +1,15 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://cgvg0yuecrkk2"]
 
-[ext_resource type="Script" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Script" uid="uid://da1fxfh4lpkb1" path="res://scripts/systems/card_data.gd" id="1_card"]
+[ext_resource type="Texture2D" uid="uid://bnyqig73jk37p" path="res://assets/card/melebur.png" id="2_card_tex"]
+[ext_resource type="Texture2D" uid="uid://btow7tq3qyik3" path="res://assets/items/1 peleburan.png" id="3_icon"]
 
 [resource]
 script = ExtResource("1_card")
 card_id = &"peleburan"
-display_name = "Peleburan"
+display_name = "Melebur"
 category = 1
 description = "Proses mencairkan logam agar dapat mengikuti bentuk cetakan."
+card_texture = ExtResource("2_card_tex")
+icon = ExtResource("3_icon")
 consumable = false

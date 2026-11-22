@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cfwgaeqqu3p7w"]
 
-[ext_resource type="Script" path="res://scenes/main/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://blkaibvoigghl" path="res://scenes/main/main.gd" id="1_main"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=1103793786]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_main")
 
-[node name="SceneContainer" type="Control" parent="."]
+[node name="SceneContainer" type="Control" parent="." unique_id=150506408]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
